@@ -1,11 +1,13 @@
-# indaggo-auth
+# clearstats-auth
+
 Auth service
 
 ## Environment Variables
+
 ```bash
 export ENV=local
 
-export DATABASE_URL=mysql://root:indaggo-pw@localhost:3306/indaggo
+export DATABASE_URL=mysql://root:clearstats-pw@localhost:3306/clearstats
 
 export JWT_TOKEN_SECRET=access-token-secret
 export JWT_TOKEN_LIFETIME=86400

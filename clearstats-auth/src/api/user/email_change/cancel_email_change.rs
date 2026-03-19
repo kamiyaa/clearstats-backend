@@ -127,7 +127,7 @@ mod tests {
 
         let code_exists = fetch_email_change_verification_code::run_query(
             &db_manager,
-            "newALICE@indaggo.com",
+            "newALICE@clearstats.dev",
             "D3JTJ4",
         )
         .await

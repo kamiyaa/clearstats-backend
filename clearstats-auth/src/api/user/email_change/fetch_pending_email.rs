@@ -112,7 +112,7 @@ mod tests {
 
         assert_eq!(
             result.result.pending_email.unwrap_or_default(),
-            "newALICE@indaggo.com"
+            "newALICE@clearstats.dev"
         );
 
         Ok(())

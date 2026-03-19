@@ -1,0 +1,32 @@
+name: Run unit tests
+on:
+  push:
+    branches: [dev]
+  pull_request:
+    branches: [dev]
+
+jobs:
+  run-tests:
+    name: Cargo test
+    runs-on: blacksmith-4vcpu-ubuntu-2404
+    strategy:
+      matrix:
+        toolchain: [stable]
+    env:
+      DATABASE_URL: ${{ vars.CI_TEST_DATABASE_URL }}
+    steps:
+      # checkout repo
+      - name: checkout repo
+        uses: actions/checkout@v4
+      - run: sudo apt-get install nasm
+      # setup docker
+      - name: Setup Blacksmith Builder
+        uses: useblacksmith/setup-docker-builder@v1
+      - name: Install ${{ matrix.toolchain }} rust
+        run: rustup update ${{ matrix.toolchain }} && rustup default ${{ matrix.toolchain }}
+      - name: spin up mysql database
+        run: |
+          cd database
+          docker compose up -d
+      - run: cargo test
+        if: ${{ matrix.toolchain == 'stable' }}

@@ -129,7 +129,7 @@ mod tests {
 
         let api_url = "/user/login".to_string();
         let body = RequestBody {
-            email: "alice@indaggo.com".to_string(),
+            email: "alice@clearstats.dev".to_string(),
             password: "password".to_string(),
         };
         let request = test_request::JsonRequestParams {
@@ -167,7 +167,7 @@ mod tests {
 
         let api_url = "/user/login".to_string();
         let body = RequestBody {
-            email: "alice@indaggo.com".to_string(),
+            email: "alice@clearstats.dev".to_string(),
             password: "password2".to_string(),
         };
         let request = test_request::JsonRequestParams {

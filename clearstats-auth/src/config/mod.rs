@@ -9,7 +9,7 @@ use shared_lib::{
 pub struct AppConfig {
     pub environment: Environment,
     pub database_url: String,
-    pub indaggo_lab_url: String,
+    pub clearstats_lab_url: String,
     pub jwt_token_secret: String,
     pub jwt_token_lifetime: u64,
     pub jwt_refresh_token_secret: String,
@@ -24,7 +24,7 @@ impl AppConfig {
         let environment = Environment::from_env_var("ENV")?;
         let database_url = utils::get_env_var("DATABASE_URL")?;
 
-        let indaggo_lab_url = utils::get_env_var("INDAGGO_LAB_URL")?;
+        let clearstats_lab_url = utils::get_env_var("INDAGGO_LAB_URL")?;
 
         let jwt_token_secret = utils::get_env_var("JWT_TOKEN_SECRET")?;
         let jwt_token_lifetime = utils::get_env_var("JWT_TOKEN_LIFETIME")?;
@@ -51,7 +51,7 @@ impl AppConfig {
         Ok(Self {
             environment,
             database_url,
-            indaggo_lab_url,
+            clearstats_lab_url,
             jwt_token_secret,
             jwt_token_lifetime,
             jwt_refresh_token_secret,

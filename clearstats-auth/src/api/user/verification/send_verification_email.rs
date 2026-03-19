@@ -61,7 +61,7 @@ async fn _handler(
     let email_content = format!("Your verification code is: {verification_code}");
 
     let data =
-        MailerSendEmailRequestBuilder::new(NO_REPLY_EMAIL.to_string(), "Indaggo".to_string())
+        MailerSendEmailRequestBuilder::new(NO_REPLY_EMAIL.to_string(), "ClearStats".to_string())
             .to_email(user_email)
             .subject(subject)
             .content(email_content)

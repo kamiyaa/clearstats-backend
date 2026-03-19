@@ -123,7 +123,7 @@ mod tests {
         // Setup Done
 
         let user_jwt = TestUser::Alice.generate_jwt(config.get_jwt_token_secret().as_bytes())?;
-        let new_email = "alice_new@indaggo.com".to_string();
+        let new_email = "alice_new@clearstats.dev".to_string();
         let body = RequestBody {
             new_email: new_email.clone(),
         };

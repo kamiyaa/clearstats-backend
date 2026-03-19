@@ -15,7 +15,7 @@ use crate::database;
 use crate::database::user_credential::fetch_user_by_email;
 use crate::utils::crypto;
 
-const SUBJECT: &str = "Indaggo Account Password Reset";
+const SUBJECT: &str = "ClearStats Account Password Reset";
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct RequestBody {
@@ -86,13 +86,13 @@ pub async fn _handler(
     })?;
 
     let username = user.username;
-    let indaggo_lab_url = app_state.config.indaggo_lab_url.as_str();
+    let clearstats_lab_url = app_state.config.clearstats_lab_url.as_str();
     let email_content = format!(
-        "Here is your password reset link: {indaggo_lab_url}/user/password_reset?token={verification_code}&username={username}"
+        "Here is your password reset link: {clearstats_lab_url}/user/password_reset?token={verification_code}&username={username}"
     );
 
     let data =
-        MailerSendEmailRequestBuilder::new(NO_REPLY_EMAIL.to_string(), "Indaggo".to_string())
+        MailerSendEmailRequestBuilder::new(NO_REPLY_EMAIL.to_string(), "ClearStats".to_string())
             .to_email(email)
             .subject(SUBJECT.to_string())
             .content(email_content)
@@ -161,7 +161,7 @@ mod tests {
         // Setup Done
 
         let body = RequestBody {
-            email: "alice@indaggo.com".into(),
+            email: "alice@clearstats.dev".into(),
         };
 
         let mock_client = MockMailersendClient::default();
@@ -187,7 +187,7 @@ mod tests {
                 email: body.email.clone(),
             }],
             from: SendEmailFrom {
-                name: "Indaggo".into(),
+                name: "ClearStats".into(),
                 email: NO_REPLY_EMAIL.into(),
             },
             subject: Some(SUBJECT.to_string()),
@@ -215,7 +215,7 @@ mod tests {
         // Setup Done
 
         let body = RequestBody {
-            email: "unknown-user@indaggo.com".into(),
+            email: "unknown-user@clearstats.dev".into(),
         };
 
         let mock_client = MockMailersendClient::default();
@@ -241,7 +241,7 @@ mod tests {
         // Setup Done
 
         let body = RequestBody {
-            email: "alice@indaggo.com".into(),
+            email: "alice@clearstats.dev".into(),
         };
 
         let mock_client = MockMailersendClient::default();
@@ -279,7 +279,7 @@ mod tests {
                 email: body.email.clone(),
             }],
             from: SendEmailFrom {
-                name: "Indaggo".into(),
+                name: "ClearStats".into(),
                 email: NO_REPLY_EMAIL.into(),
             },
             subject: Some(SUBJECT.to_string()),

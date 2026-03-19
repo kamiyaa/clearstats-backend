@@ -1,7 +1,7 @@
 # Deployment variables
 
 export PROJECT_ID=$PROJECT_ID
-export GCP_ARTIFACT_REPOSITORY=indaggo-dev
+export GCP_ARTIFACT_REPOSITORY=clearstats-dev
 export DOCKER_REGISTRY=northamerica-northeast2-docker.pkg.dev
 
 export GCP_CLOUD_RUN_REGION=us-east1

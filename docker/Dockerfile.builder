@@ -21,6 +21,6 @@ RUN --mount=type=cache,target=/app/target/release/build \
 FROM scratch AS output
 WORKDIR app
 
-COPY --from=builder /app/target/release/indaggo-* /app
+COPY --from=builder /app/target/release/clearstats-* /app
 
-ENTRYPOINT ["/app/indaggo-api-labspace"]
+ENTRYPOINT ["/app/clearstats-api-labspace"]

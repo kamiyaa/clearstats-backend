@@ -1,0 +1,29 @@
+name: Lint check
+on:
+  push:
+    branches: [dev]
+  pull_request:
+    branches: [dev]
+jobs:
+  check:
+    name: Cargo format check
+    runs-on: blacksmith-4vcpu-ubuntu-2404
+    concurrency:
+      group: lint-check
+      cancel-in-progress: true
+    strategy:
+      matrix:
+        toolchain: [stable]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install ${{ matrix.toolchain }} rust
+        run: rustup update ${{ matrix.toolchain }} && rustup default ${{ matrix.toolchain }}
+      - name: Install ${{ matrix.toolchain }} rustfmt
+        run: rustup component add rustfmt
+      - run: sudo apt-get install nasm
+      - run: cargo -Vv && rustc -Vv
+      - run: cargo check
+      - run: cargo check --all-features
+        if: ${{ matrix.toolchain == 'stable' }}
+      - run: cargo fmt --all -- --check
+        if: ${{ matrix.toolchain == 'stable' }}

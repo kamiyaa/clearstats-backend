@@ -95,7 +95,7 @@ mod tests {
 
         let actual = result.result;
         let expected = ResponseBody {
-            email: "charlie@indaggo.com".to_string(),
+            email: "charlie@clearstats.dev".to_string(),
         };
         assert_eq!(actual, expected);
         Ok(())

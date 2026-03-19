@@ -1,6 +1,6 @@
 #!/bin/bash
 
-SERVICE=indaggo-assets
+SERVICE=clearstats-assets
 SERVICE_NAME=$ENV-$SERVICE
 
 echo "Deploying ${SERVICE_NAME} to cloud run"

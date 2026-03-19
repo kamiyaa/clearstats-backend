@@ -1,0 +1,90 @@
+---
+name: Deploy to Dev
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - dev
+
+jobs:
+  build-docker:
+    name: Build docker and push to registry
+    runs-on: blacksmith-4vcpu-ubuntu-2404
+    permissions:
+      contents: read
+      packages: write
+    env:
+      GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
+      SERVICE_ACCOUNT: ${{ vars.SERVICE_ACCOUNT }}
+      PROJECT_ID: ${{ vars.PROJECT_ID }}
+      GCP_DOCKER_REGISTRY: ${{ vars.GCP_DOCKER_REGISTRY }}
+      GCP_ARTIFACT_REPOSITORY: ${{ vars.DEV_GCP_ARTIFACT_REPOSITORY }}
+
+    environment: dev
+    defaults:
+      run:
+        shell: bash
+    steps:
+      # checkout repo
+      - name: checkout repo
+        uses: actions/checkout@v4
+      # login to Google cloud
+      - id: auth
+        name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          token_format: access_token
+          credentials_json: ${{ env.GOOGLE_CREDENTIALS }}
+          service_account: ${{ env.SERVICE_ACCOUNT }}
+      - name: Setup Blacksmith Builder
+        uses: useblacksmith/setup-docker-builder@v1
+      - name: Login to GAR
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.GCP_DOCKER_REGISTRY }}
+          username: oauth2accesstoken
+          password: ${{ steps.auth.outputs.access_token }}
+
+      - name: compile services with docker container
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        run: |
+          ./infra/compile-all.sh
+
+      # Build and Push Docker
+      - name: build and push docker images
+        run: |
+          ./infra/docker-images-build-push.sh
+
+  deploy:
+    needs: build-docker
+    name: Deploy images to GCP Cloud Run
+    runs-on: blacksmith-4vcpu-ubuntu-2404
+    env:
+      GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
+      SERVICE_ACCOUNT: ${{ vars.SERVICE_ACCOUNT }}
+      PROJECT_ID: ${{ vars.PROJECT_ID }}
+      GCP_DOCKER_REGISTRY: ${{ vars.GCP_DOCKER_REGISTRY }}
+      GCP_ARTIFACT_REPOSITORY: ${{ vars.DEV_GCP_ARTIFACT_REPOSITORY }}
+      GCP_CLOUD_RUN_SERVICE_ACCOUNT: ${{ vars.GCP_CLOUD_RUN_SERVICE_ACCOUNT }}
+
+    environment: production
+    defaults:
+      run:
+        shell: bash
+    steps:
+      # checkout repo
+      - name: checkout repo
+        uses: actions/checkout@v4
+      # login to Google cloud
+      - id: auth
+        name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          token_format: access_token
+          credentials_json: ${{ env.GOOGLE_CREDENTIALS }}
+          service_account: ${{ env.SERVICE_ACCOUNT }}
+      # Deploy Docker Images to GCP
+      - name: deploy services to cloud run
+        run: |
+          ./infra/deploy-cloud-run-dev.sh

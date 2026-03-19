@@ -179,7 +179,7 @@ mod tests {
                 ServerErrorResponse::new(StatusCode::NOT_FOUND, 1234, error_msg.to_string())
             })?;
 
-        assert_eq!(email, "newALICE@indaggo.com");
+        assert_eq!(email, "newALICE@clearstats.dev");
 
         Ok(())
     }

@@ -192,8 +192,8 @@ fn validate_input(payload: &RequestBody) -> AppServerResult {
         let err = ServerErrorResponse::new(StatusCode::BAD_REQUEST, 1234, error_msg.to_string());
         return Err(err);
     }
-    if payload.username.starts_with("indaggo") {
-        let error_msg = "Username cannot start with indaggo, reserved";
+    if payload.username.starts_with("clearstats") {
+        let error_msg = "Username cannot start with clearstats, reserved";
         let err = ServerErrorResponse::new(StatusCode::BAD_REQUEST, 1234, error_msg.to_string());
         return Err(err);
     }
@@ -279,7 +279,7 @@ mod tests {
         let TestServer { app, mut rx, .. } = setup_test_server(&config, pool, router());
         // Setup Done
 
-        let user_email = "alice@indaggo.com";
+        let user_email = "alice@clearstats.dev";
         let body = RequestBody {
             email: user_email.to_string(),
             password: "password".to_string(),
@@ -330,7 +330,7 @@ mod tests {
         let TestServer { app, .. } = setup_test_server(&config, pool, router());
         // Setup Done
 
-        let user_email = "alice@indaggo.com";
+        let user_email = "alice@clearstats.dev";
         let body = RequestBody {
             email: user_email.to_string(),
             password: "password".to_string(),
@@ -359,7 +359,7 @@ mod tests {
         let TestServer { app, .. } = setup_test_server(&config, pool, router());
         // Setup Done
 
-        let user_email = "alice@indaggo.com";
+        let user_email = "alice@clearstats.dev";
         let body = RequestBody {
             email: user_email.to_string(),
             password: "password".to_string(),
