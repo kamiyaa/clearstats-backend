@@ -1,7 +1,7 @@
+use argon2::password_hash::Salt;
 use argon2::{Argon2, Params, PasswordHasher};
 use axum::http::StatusCode;
 use base64::{Engine, engine::general_purpose::STANDARD_NO_PAD};
-use argon2::password_hash::Salt;
 use rand::{RngExt, distr::Alphanumeric};
 
 use shared_lib::error::{AppServerResult, ServerErrorResponse};

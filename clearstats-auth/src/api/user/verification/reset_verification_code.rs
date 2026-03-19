@@ -123,12 +123,14 @@ mod tests {
         let verification_code = "123456";
         _handler(app_state, headers, &mock_client, verification_code).await?;
 
-        let expected =
-            MailerSendEmailRequestBuilder::new(NO_REPLY_EMAIL.to_string(), "ClearStats".to_string())
-                .to_email("alice@clearstats.dev".into())
-                .subject("Email Verification Code".into())
-                .content(format!("Your verification code is: {verification_code}"))
-                .build();
+        let expected = MailerSendEmailRequestBuilder::new(
+            NO_REPLY_EMAIL.to_string(),
+            "ClearStats".to_string(),
+        )
+        .to_email("alice@clearstats.dev".into())
+        .subject("Email Verification Code".into())
+        .content(format!("Your verification code is: {verification_code}"))
+        .build();
 
         let actual = mock_client
             .requests

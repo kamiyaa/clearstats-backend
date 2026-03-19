@@ -65,10 +65,7 @@ mod tests {
     #[tracing_test::traced_test]
     #[sqlx::test(
         migrator = "shared_lib::database::DEFAULT_MIGRATOR",
-        fixtures(
-            path = "../../../../fixtures",
-            scripts("0010_init_users")
-        )
+        fixtures(path = "../../../../fixtures", scripts("0010_init_users"))
     )]
     async fn test_001_happy_path(pool: DatabasePool) -> AppServerResult {
         // Setup
