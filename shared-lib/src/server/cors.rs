@@ -1,7 +1,12 @@
 use axum::http::{HeaderValue, Method, header};
 use tower_http::cors::{AllowHeaders, AllowMethods, AllowOrigin, Any, CorsLayer};
 
-pub const ALLOWED_ORIGINS: &[&str] = &["http://localhost:5222", "https://clearstats.dev"];
+pub const ALLOWED_ORIGINS: &[&str] = &[
+    "http://localhost:5222",
+    "https://clearstats.dev",
+    "https://app.clearstats.dev",
+    "https://dev-app.clearstats.dev",
+];
 
 pub fn allow_origin_list() -> AllowOrigin {
     AllowOrigin::list(
