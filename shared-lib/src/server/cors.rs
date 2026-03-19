@@ -2,12 +2,8 @@ use axum::http::{HeaderValue, Method, header};
 use tower_http::cors::{AllowHeaders, AllowMethods, AllowOrigin, Any, CorsLayer};
 
 pub const ALLOWED_ORIGINS: &[&str] = &[
-    "http://localhost:5010",
-    "http://localhost:5020",
-    "https://lab.indaggo.com",
-    "https://institution.indaggo.com",
-    "https://dev-lab.indaggo.com",
-    "https://dev-institution.indaggo.com",
+    "http://localhost:5222",
+    "https://clearstats.dev",
 ];
 
 pub fn allow_origin_list() -> AllowOrigin {
