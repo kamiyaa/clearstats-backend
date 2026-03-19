@@ -18,6 +18,5 @@ gcloud run deploy $SERVICE_NAME --image $IMAGE \
     --update-secrets=JWT_TOKEN_SECRET=${ENV_VAR_PREFIX}_JWT_TOKEN_SECRET:latest \
     --update-secrets=JWT_REFRESH_TOKEN_SECRET=${ENV_VAR_PREFIX}_JWT_REFRESH_TOKEN_SECRET:latest \
     --update-secrets=MAILERSEND_API_KEY=MAILERSEND_API_KEY:latest \
-    --update-secrets=SENTRY_DSN_URL=${ENV_VAR_PREFIX}_SENTRY_DSN_URL_BACKEND:latest \
     --update-labels env=$ENV,service=$SERVICE_NAME \
     --execution-environment=gen2

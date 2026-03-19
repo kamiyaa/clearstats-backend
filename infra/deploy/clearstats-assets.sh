@@ -15,6 +15,5 @@ gcloud run deploy $SERVICE_NAME --image $IMAGE \
     --update-secrets=DATABASE_URL=${ENV_VAR_PREFIX}_DATABASE_URL:latest \
     --update-secrets=JWT_TOKEN_SECRET=${ENV_VAR_PREFIX}_JWT_TOKEN_SECRET:latest \
     --update-secrets=GCP_PROJECT_ID=GCP_PROJECT_ID:latest \
-    --update-secrets=SENTRY_DSN_URL=${ENV_VAR_PREFIX}_SENTRY_DSN_URL_BACKEND:latest \
     --update-labels env=$ENV,service=$SERVICE_NAME \
     --execution-environment=gen2
