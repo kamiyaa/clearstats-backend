@@ -464,6 +464,23 @@ dependencies = [
 [[package]]
 name = "clearstats-api"
 version = "0.1.0"
+dependencies = [
+ "argon2",
+ "axum",
+ "base64 0.13.1",
+ "chrono",
+ "jsonwebtoken",
+ "rand 0.8.5",
+ "serde",
+ "serde_json",
+ "shared-lib",
+ "sqlx",
+ "tokio",
+ "tower",
+ "tower-http",
+ "tracing",
+ "tracing-subscriber",
+]
 
 [[package]]
 name = "clearstats-auth"
