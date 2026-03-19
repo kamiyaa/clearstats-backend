@@ -1,0 +1,11 @@
+pub mod check_email_exists;
+pub mod check_username_exists;
+pub mod fetch_user_by_email;
+pub mod fetch_user_by_user_id;
+pub mod fetch_user_by_username;
+pub mod fetch_user_email;
+pub mod insert_user;
+pub mod reset_password;
+pub mod update_email_verified;
+pub mod update_password;
+pub mod update_user;

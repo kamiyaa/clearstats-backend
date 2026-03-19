@@ -1,0 +1,16 @@
+FROM alpine:3.23 AS runtime
+
+WORKDIR /app
+
+RUN apk add nasm
+
+ENV HOST=0.0.0.0
+ENV PORT=8080
+
+EXPOSE $PORT
+
+ADD app app
+
+COPY app /usr/local/bin/app
+
+ENTRYPOINT ["/usr/local/bin/app"]

@@ -1,0 +1,35 @@
+[package]
+name = "clearstats-auth"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+argon2.workspace = true
+axum.workspace = true
+axum-extra = { workspace = true, features = ["cookie"] }
+base64.workspace = true
+chrono.workspace = true
+cookie.workspace = true
+futures.workspace = true
+image.workspace = true
+jsonwebtoken.workspace = true
+lazy_static.workspace = true
+rand.workspace = true
+reqwest.workspace = true
+sentry.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+sqlx.workspace = true
+tokio.workspace = true
+tower.workspace = true
+tower-http.workspace = true
+tracing.workspace = true
+tracing-subscriber.workspace = true
+url.workspace = true
+urlencoding.workspace = true
+
+shared-lib.workspace = true
+
+[dev-dependencies]
+pretty_assertions.workspace = true
+tracing-test.workspace = true

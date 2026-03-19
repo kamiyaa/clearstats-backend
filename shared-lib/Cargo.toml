@@ -1,0 +1,34 @@
+[package]
+name = "shared-lib"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+axum = { workspace = true, features = ["multipart"] }
+async-trait.workspace = true
+base64.workspace = true
+chrono = { workspace = true, features = ["alloc"] }
+colored.workspace = true
+futures.workspace = true
+hex.workspace = true
+hmac.workspace = true
+http-body-util.workspace = true
+jsonwebtoken.workspace = true
+lazy_static.workspace = true
+reqwest.workspace = true
+sentry.workspace = true
+sentry-tracing.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+sha2.workspace = true
+sqlx.workspace = true
+tokio.workspace = true
+tower.workspace = true
+tower-http.workspace = true
+tracing.workspace = true
+tracing-subscriber.workspace = true
+url.workspace = true
+urlencoding.workspace = true
+
+[dev-dependencies]
+pretty_assertions.workspace = true

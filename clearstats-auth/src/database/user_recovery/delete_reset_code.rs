@@ -1,0 +1,19 @@
+use shared_lib::database::DatabaseResult;
+use shared_lib::database::manager::{DatabaseManager, DatabaseManagerTrait};
+use shared_lib::database::tables::user::TABLE_USER_PASSWORD_RESET;
+
+pub async fn run_query(db_manager: &DatabaseManager, user_id: u64) -> DatabaseResult {
+    let pool = db_manager.get_database_pool();
+
+    let sql_query = format!(
+        "
+        DELETE FROM
+            {TABLE_USER_PASSWORD_RESET}
+        WHERE
+            user_id = ?
+        ;"
+    );
+
+    let _res = sqlx::query(&sql_query).bind(user_id).execute(pool).await?;
+    Ok(())
+}

@@ -1,0 +1,60 @@
+[package]
+name = "clearstats-backend"
+version = "0.1.0"
+edition = "2024"
+
+[workspace]
+members = [
+	"clearstats-auth",
+	"clearstats-api",
+	"shared-lib",
+]
+default-members = [
+	"clearstats-auth",
+	"clearstats-api",
+	"shared-lib",
+]
+
+[workspace.dependencies]
+argon2 = "^0"
+axum = "^0"
+axum-extra = "^0"
+async-trait = "^0"
+base64 = "^0"
+chrono = "^0"
+colored = "^2"
+cookie = "^0"
+futures = "^0"
+hex = "^0"
+hmac = "^0"
+http-body-util = "^0"
+image = "^0"
+imgref = "^1"
+jsonwebtoken = "^8"
+lazy_static = "^1"
+liquid = "^0"
+load_image = "^3"
+rand = "^0"
+ravif = "^0"
+reqwest = { version = "^0", default-features = false, features = ["json", "rustls-tls"]}
+sentry = { version = "^0", default-features = false, features = ["backtrace", "contexts", "panic", "reqwest", "rustls"] }
+sentry-tracing = "^0"
+serde = { version = "^1", features = ["derive"] }
+serde_json = "^1"
+sha2 = "^0"
+sqlx = { version = "^0", features = ["migrate", "runtime-tokio-rustls", "mysql"] }
+tokio = { version = "^1", features = ["rt-multi-thread"] }
+tower = "^0"
+tower-http = { version = "^0", features = ["cors"] }
+tracing = "^0"
+tracing-subscriber = { version = "^0", features = ["env-filter", "fmt", "json", "std"] }
+url = "^2"
+urlencoding = "^2"
+uuid = { version = "^1", features = ["v4"] }
+webp = "^0"
+
+shared-lib = { version = "^0", path = "./shared-lib" }
+
+# dev-dependencies
+pretty_assertions = "^1"
+tracing-test = "^0"
