@@ -20,7 +20,7 @@ pub async fn handler(
     let q = params.q.unwrap_or_default();
     let db_manager = app_state.get_db_manager();
 
-    let authors = search_authors::run_query(db_manager, &q)
+    let authors = search_authors::run_query(db_manager, q.trim())
         .await
         .map_err(|err| {
             tracing::error!(?err, "Failed to search authors");

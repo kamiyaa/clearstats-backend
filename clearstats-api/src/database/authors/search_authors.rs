@@ -15,9 +15,11 @@ pub async fn run_query(db_manager: &DatabaseManager, q: &str) -> DatabaseResult<
     let pool = db_manager.get_database_pool();
     let pattern = format!("%{q}%");
     let results = sqlx::query_as(
-        "SELECT id, name, bio, avatar_url, affiliation FROM author
-         WHERE name LIKE ? OR affiliation LIKE ?
-         LIMIT 20",
+        "SELECT id, name, bio, avatar_url, affiliation
+        FROM author
+        WHERE
+            name LIKE ? OR affiliation LIKE ?
+        LIMIT 20",
     )
     .bind(&pattern)
     .bind(&pattern)
