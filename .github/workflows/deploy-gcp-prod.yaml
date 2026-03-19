@@ -8,7 +8,7 @@ on:
 jobs:
   build-docker:
     name: Build docker and push to registry
-    runs-on: blacksmith-4vcpu-ubuntu-2404
+    runs-on: ubuntu-latest
     permissions:
       contents: read
       packages: write
@@ -58,7 +58,7 @@ jobs:
   deploy:
     needs: build-docker
     name: Deploy images to GCP Cloud Run
-    runs-on: blacksmith-4vcpu-ubuntu-2404
+    runs-on: ubuntu-latest
     env:
       GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
       SERVICE_ACCOUNT: ${{ vars.SERVICE_ACCOUNT }}
