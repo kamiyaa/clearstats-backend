@@ -59,11 +59,3 @@ pub struct QuestionResponse {
     pub user_vote: Option<i8>,
     pub created_at: String,
 }
-
-#[derive(Clone, Debug, Serialize, Deserialize)]
-pub struct PaginatedResponse<T: Serialize> {
-    pub items: Vec<T>,
-    pub total: u64,
-    pub page: u64,
-    pub per_page: u64,
-}

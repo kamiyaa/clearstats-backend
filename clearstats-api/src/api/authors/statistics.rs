@@ -41,7 +41,7 @@ pub async fn handler(
 
     let mut rows = Vec::new();
     for (id,) in id_rows {
-        if let Some(row) = fetch_statistic_by_id::run_query(db_manager, id)
+        if let Some(row) = fetch_statistic_by_id::run_query(db_manager, id, current_user_id)
             .await
             .map_err(|err| {
                 tracing::error!(?err, "Failed to fetch statistic");
@@ -58,6 +58,7 @@ pub async fn handler(
                 description: row.description,
                 upvotes: row.upvotes,
                 downvotes: row.downvotes,
+                user_vote: row.user_vote,
                 question_count: row.question_count,
                 created_at: row.created_at,
                 updated_at: row.updated_at,
@@ -68,6 +69,6 @@ pub async fn handler(
         }
     }
 
-    let stats = build_statistic_responses(db_manager, rows, current_user_id).await?;
+    let stats = build_statistic_responses(db_manager, rows).await?;
     Ok(ServerSuccessResponse::new(stats))
 }

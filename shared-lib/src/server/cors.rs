@@ -1,5 +1,5 @@
 use axum::http::{HeaderValue, Method, header};
-use tower_http::cors::{AllowHeaders, AllowMethods, AllowOrigin, Any, CorsLayer};
+use tower_http::cors::{AllowOrigin, Any, CorsLayer};
 
 pub const ALLOWED_ORIGINS: &[&str] = &[
     "http://localhost:5222",

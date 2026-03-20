@@ -10,6 +10,7 @@ pub struct SqlData {
     pub upvotes: u64,
     pub downvotes: u64,
     pub question_count: u64,
+    pub user_vote: Option<i8>,
     pub created_at: u64,
     pub updated_at: u64,
     pub posted_by_id: u64,
@@ -17,60 +18,31 @@ pub struct SqlData {
     pub posted_by_created_at: u64,
 }
 
-pub struct Params<'a> {
-    pub search: &'a str,
-    pub tag: &'a str,
-    pub limit: u64,
-    pub offset: u64,
+#[derive(Clone, Debug)]
+pub struct SqlQuery {
+    pub user_id: Option<u64>,
+    pub search: Option<String>,
+    pub tag: Option<String>,
+    pub page_size: u64,
+    pub page_index: u64,
 }
 
 pub async fn run_query(
     db_manager: &DatabaseManager,
-    params: &Params<'_>,
+    params: &SqlQuery,
 ) -> DatabaseResult<Vec<SqlData>> {
     let pool = db_manager.get_database_pool();
 
-    if !params.tag.is_empty() {
-        let search_pattern = format!("%{}%", params.search);
-        let results = sqlx::query_as(
-            "SELECT
-                s.id,
-                s.title,
-                s.description,
-                s.upvotes,
-                s.downvotes,
-                s.question_count,
-                s.created_at,
-                s.updated_at,
-                up.user_id AS posted_by_id,
-                up.username AS posted_by_username,
-                up.created_at AS posted_by_created_at
-            FROM
-                statistic s
-            INNER JOIN
-                user_profile up
-            ON
-                s.posted_by_user_id = up.user_id
-            WHERE s.id IN
-                (SELECT statistic_id FROM statistic_tag WHERE tag = ?)
-            AND
-                (? = '' OR s.title LIKE ? OR s.description LIKE ?)
-            ORDER BY s.created_at DESC
-            LIMIT ? OFFSET ?",
-        )
-        .bind(params.tag)
-        .bind(params.search)
-        .bind(&search_pattern)
-        .bind(&search_pattern)
-        .bind(params.limit)
-        .bind(params.offset)
-        .fetch_all(pool)
-        .await?;
-        return Ok(results);
-    }
+    let search_query = match params.search.as_ref() {
+        Some(_) => "AND (s.title LIKE ? OR s.description LIKE ?)",
+        None => "",
+    };
+    let tag_query = match params.tag.as_ref() {
+        Some(_) => format!("AND s.id IN (SELECT statistic_id FROM statistic_tag WHERE tag = ?)"),
+        None => String::new(),
+    };
 
-    let search_pattern = format!("%{}%", params.search);
-    let results = sqlx::query_as(
+    let sql_query = format!(
         "SELECT
             s.id,
             s.title,
@@ -80,65 +52,44 @@ pub async fn run_query(
             s.question_count,
             s.created_at,
             s.updated_at,
-            up.user_id AS posted_by_id,
-            up.username AS posted_by_username,
-            up.created_at AS posted_by_created_at
+            s_vote.vote AS user_vote,
+            user_profile.user_id AS posted_by_id,
+            user_profile.username AS posted_by_username,
+            user_profile.created_at AS posted_by_created_at
         FROM
             statistic s
         INNER JOIN
-            user_profile up
+            user_profile
         ON
-            s.posted_by_user_id = up.user_id
+            s.posted_by_user_id = user_profile.user_id
+        LEFT JOIN
+            statistic_vote s_vote
+        ON
+            s_vote.statistic_id = s.id
         WHERE
-            (? = '' OR s.title LIKE ? OR s.description LIKE ?)
-        ORDER BY
-            s.created_at
-        DESC
-        LIMIT ?
-        OFFSET ?",
-    )
-    .bind(params.search)
-    .bind(&search_pattern)
-    .bind(&search_pattern)
-    .bind(params.limit)
-    .bind(params.offset)
-    .fetch_all(pool)
-    .await?;
-    Ok(results)
-}
+            s_vote.user_id = ?
+            {search_query}
+            {tag_query}
+        ORDER BY s.created_at DESC
+        LIMIT ? OFFSET ?"
+    );
 
-pub async fn count_query(
-    db_manager: &DatabaseManager,
-    search: &str,
-    tag: &str,
-) -> DatabaseResult<u64> {
-    let pool = db_manager.get_database_pool();
+    let mut sql_res = sqlx::query_as(&sql_query)
+        .bind(params.user_id);
 
-    if !tag.is_empty() {
-        let search_pattern = format!("%{search}%");
-        let row: (i64,) = sqlx::query_as(
-            "SELECT COUNT(*) FROM statistic s
-             WHERE s.id IN (SELECT statistic_id FROM statistic_tag WHERE tag = ?)
-             AND (? = '' OR s.title LIKE ? OR s.description LIKE ?)",
-        )
-        .bind(tag)
-        .bind(search)
-        .bind(&search_pattern)
-        .bind(&search_pattern)
-        .fetch_one(pool)
-        .await?;
-        return Ok(row.0 as u64);
+    if let Some(v) = params.search.as_ref() {
+        let search_pattern = format!("%{}%", v);
+        sql_res = sql_res
+            .bind(search_pattern.clone())
+            .bind(search_pattern);
     }
-
-    let search_pattern = format!("%{search}%");
-    let row: (i64,) = sqlx::query_as(
-        "SELECT COUNT(*) FROM statistic s
-         WHERE (? = '' OR s.title LIKE ? OR s.description LIKE ?)",
-    )
-    .bind(search)
-    .bind(&search_pattern)
-    .bind(&search_pattern)
-    .fetch_one(pool)
-    .await?;
-    Ok(row.0 as u64)
+    if let Some(v) = params.tag.as_ref() {
+        sql_res = sql_res.bind(v);
+    }
+    let sql_res = sql_res
+        .bind(params.page_size)
+        .bind(params.page_index * params.page_size)
+        .fetch_all(pool)
+        .await?;
+    return Ok(sql_res);
 }

@@ -17,6 +17,7 @@ pub struct StatisticRow {
     pub description: String,
     pub upvotes: u64,
     pub downvotes: u64,
+    pub user_vote: Option<i8>,
     pub question_count: u64,
     pub created_at: u64,
     pub updated_at: u64,
@@ -28,12 +29,10 @@ pub struct StatisticRow {
 pub async fn build_statistic_responses(
     db_manager: &DatabaseManager,
     rows: Vec<StatisticRow>,
-    current_user_id: Option<u64>,
 ) -> AppServerResult<Vec<StatisticResponse>> {
     if rows.is_empty() {
         return Ok(vec![]);
     }
-
     let statistic_ids: Vec<u64> = rows.iter().map(|r| r.id).collect();
 
     let tags = statistics::fetch_tags_by_statistic_ids::run_query(db_manager, &statistic_ids)
@@ -99,24 +98,6 @@ pub async fn build_statistic_responses(
                 "Failed to fetch authors".to_string(),
             )
         })?;
-
-    let user_votes: HashMap<u64, i8> = if let Some(user_id) = current_user_id {
-        statistics::fetch_votes_by_statistic_ids::run_query(db_manager, &statistic_ids, user_id)
-            .await
-            .map_err(|err| {
-                tracing::error!(?err, "Failed to fetch votes");
-                ServerErrorResponse::new(
-                    StatusCode::INTERNAL_SERVER_ERROR,
-                    1234,
-                    "Failed to fetch votes".to_string(),
-                )
-            })?
-            .into_iter()
-            .map(|v| (v.statistic_id, v.vote))
-            .collect()
-    } else {
-        HashMap::new()
-    };
 
     // Build lookup maps
     let mut tags_by_id: HashMap<u64, Vec<String>> = HashMap::new();
@@ -199,7 +180,7 @@ pub async fn build_statistic_responses(
                 },
                 upvotes: row.upvotes,
                 downvotes: row.downvotes,
-                user_vote: user_votes.get(&row.id).copied(),
+                user_vote: row.user_vote,
                 question_count: row.question_count,
                 created_at: unix_secs_to_iso(row.created_at),
                 updated_at: unix_secs_to_iso(row.updated_at),

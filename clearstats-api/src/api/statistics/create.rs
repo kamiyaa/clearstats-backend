@@ -78,7 +78,7 @@ pub async fn handler(
             )
         })?;
 
-    let row = fetch_statistic_by_id::run_query(db_manager, statistic_id)
+    let row = fetch_statistic_by_id::run_query(db_manager, statistic_id, Some(token.user.user_id))
         .await
         .map_err(|err| {
             tracing::error!(?err, "Failed to fetch created statistic");
@@ -102,6 +102,7 @@ pub async fn handler(
         description: row.description,
         upvotes: row.upvotes,
         downvotes: row.downvotes,
+        user_vote: row.user_vote,
         question_count: row.question_count,
         created_at: row.created_at,
         updated_at: row.updated_at,
@@ -110,7 +111,7 @@ pub async fn handler(
         posted_by_created_at: row.posted_by_created_at,
     }];
 
-    let mut stats = build_statistic_responses(db_manager, rows, Some(token.user.user_id)).await?;
+    let mut stats = build_statistic_responses(db_manager, rows).await?;
     let stat = stats.remove(0);
 
     Ok(ServerSuccessResponse::new_with_status(

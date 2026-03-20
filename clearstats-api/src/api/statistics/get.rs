@@ -21,7 +21,7 @@ pub async fn handler(
 
     let db_manager = app_state.get_db_manager();
 
-    let row = fetch_statistic_by_id::run_query(db_manager, id)
+    let row = fetch_statistic_by_id::run_query(db_manager, id, current_user_id)
         .await
         .map_err(|err| {
             tracing::error!(?err, "Failed to fetch statistic");
@@ -45,6 +45,7 @@ pub async fn handler(
         description: row.description,
         upvotes: row.upvotes,
         downvotes: row.downvotes,
+        user_vote: row.user_vote,
         question_count: row.question_count,
         created_at: row.created_at,
         updated_at: row.updated_at,
@@ -53,7 +54,7 @@ pub async fn handler(
         posted_by_created_at: row.posted_by_created_at,
     }];
 
-    let mut stats = build_statistic_responses(db_manager, rows, current_user_id).await?;
+    let mut stats = build_statistic_responses(db_manager, rows).await?;
     let stat = stats.remove(0);
 
     Ok(ServerSuccessResponse::new(stat))

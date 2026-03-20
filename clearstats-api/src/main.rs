@@ -19,6 +19,8 @@ use shared_lib::{
 
 use crate::{config::AppConfig, state::AppState};
 
+pub const PAGE_SIZE: u64 = 20;
+
 const PORT: u16 = 8204;
 
 pub type ServerRouter = Router<AppState>;
