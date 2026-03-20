@@ -1,6 +1,6 @@
 use shared_lib::{
     config::{env::Environment, service_config::ServiceConfig},
-    error::{AppServerResult},
+    error::AppServerResult,
     utils,
 };
 

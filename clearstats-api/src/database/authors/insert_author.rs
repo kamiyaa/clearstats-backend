@@ -24,24 +24,22 @@ pub async fn run_query(
 ) -> DatabaseResult<AuthorRow> {
     let pool = db_manager.get_database_pool();
 
-    let res = sqlx::query(
-        "INSERT INTO author (name, bio, avatar_url, affiliation) VALUES (?, ?, ?, ?)",
-    )
-    .bind(data.name)
-    .bind(data.bio)
-    .bind(data.avatar_url)
-    .bind(data.affiliation)
-    .execute(pool)
-    .await?;
+    let res =
+        sqlx::query("INSERT INTO author (name, bio, avatar_url, affiliation) VALUES (?, ?, ?, ?)")
+            .bind(data.name)
+            .bind(data.bio)
+            .bind(data.avatar_url)
+            .bind(data.affiliation)
+            .execute(pool)
+            .await?;
 
     let author_id = res.last_insert_id();
 
-    let row: AuthorRow = sqlx::query_as(
-        "SELECT id, name, bio, avatar_url, affiliation FROM author WHERE id = ?",
-    )
-    .bind(author_id)
-    .fetch_one(pool)
-    .await?;
+    let row: AuthorRow =
+        sqlx::query_as("SELECT id, name, bio, avatar_url, affiliation FROM author WHERE id = ?")
+            .bind(author_id)
+            .fetch_one(pool)
+            .await?;
 
     Ok(row)
 }
