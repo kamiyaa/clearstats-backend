@@ -63,7 +63,6 @@ pub async fn handler(
             posted_by: UserResponse {
                 id: r.posted_by_id,
                 username: r.posted_by_username,
-                email: r.posted_by_email,
                 created_at: unix_secs_to_iso(r.posted_by_created_at),
             },
             upvotes: r.upvotes,

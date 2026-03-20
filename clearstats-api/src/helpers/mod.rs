@@ -195,7 +195,6 @@ pub async fn build_statistic_responses(
                 posted_by: UserResponse {
                     id: row.posted_by_id,
                     username: row.posted_by_username,
-                    email: row.posted_by_email,
                     created_at: unix_secs_to_iso(row.posted_by_created_at),
                 },
                 upvotes: row.upvotes,

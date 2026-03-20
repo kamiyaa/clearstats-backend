@@ -4,7 +4,6 @@ use serde::{Deserialize, Serialize};
 pub struct UserResponse {
     pub id: u64,
     pub username: String,
-    pub email: String,
     pub created_at: String,
 }
 

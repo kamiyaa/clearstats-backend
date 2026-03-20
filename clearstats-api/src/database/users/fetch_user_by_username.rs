@@ -6,7 +6,6 @@ use sqlx::FromRow;
 pub struct SqlData {
     pub id: u64,
     pub username: String,
-    pub email: String,
     pub created_at: u64,
 }
 

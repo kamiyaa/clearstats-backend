@@ -31,7 +31,6 @@ pub async fn handler(
     Ok(ServerSuccessResponse::new(UserResponse {
         id: user.id,
         username: user.username,
-        email: user.email,
         created_at: unix_secs_to_iso(user.created_at),
     }))
 }
