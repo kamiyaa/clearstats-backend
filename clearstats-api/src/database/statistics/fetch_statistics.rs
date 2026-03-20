@@ -79,6 +79,7 @@ pub async fn run_query(
             s.downvotes,
             s.question_count,
             s.created_at,
+            s.updated_at,
             up.user_id AS posted_by_id,
             up.username AS posted_by_username,
             up.created_at AS posted_by_created_at

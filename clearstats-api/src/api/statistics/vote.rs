@@ -1,27 +1,33 @@
 use axum::Json;
 use axum::extract::{Path, State};
 use axum::http::{HeaderMap, StatusCode};
-use serde::Deserialize;
+use serde::{Deserialize, Serialize};
 
 use shared_lib::error::{AppServerResult, ServerErrorResponse, ServerSuccessResponse};
 use shared_lib::types::jwt::AccessToken;
 
 use crate::AppState;
-use crate::database::statistics::{delete_vote, fetch_statistic_by_id, upsert_vote};
-use crate::helpers::{StatisticRow, build_statistic_responses};
-use crate::types::StatisticResponse;
+use crate::database::statistics::{delete_vote, fetch_statistic_metrics_by_id, upsert_vote};
 
-#[derive(Debug, Deserialize)]
-pub struct VoteBody {
+#[derive(Clone, Debug, Deserialize)]
+pub struct RequestBody {
     pub vote: i8,
+}
+
+#[derive(Clone, Debug, Serialize)]
+pub struct ResponseBody {
+    pub id: u64,
+    pub upvotes: u64,
+    pub downvotes: u64,
+    pub question_count: u64,
 }
 
 pub async fn upsert_handler(
     State(app_state): State<AppState>,
     headers: HeaderMap,
     Path(id): Path<u64>,
-    Json(payload): Json<VoteBody>,
-) -> AppServerResult<ServerSuccessResponse<StatisticResponse>> {
+    Json(payload): Json<RequestBody>,
+) -> AppServerResult<ServerSuccessResponse<ResponseBody>> {
     let token =
         AccessToken::from_header_map_unverified(headers, app_state.config.get_jwt_token_secret())?;
 
@@ -46,7 +52,7 @@ pub async fn upsert_handler(
             )
         })?;
 
-    let row = fetch_statistic_by_id::run_query(db_manager, id)
+    let row = fetch_statistic_metrics_by_id::run_query(db_manager, id)
         .await
         .map_err(|err| {
             tracing::error!(?err, "Failed to fetch statistic");
@@ -64,29 +70,20 @@ pub async fn upsert_handler(
             )
         })?;
 
-    let rows = vec![StatisticRow {
+    let resp = ResponseBody {
         id: row.id,
-        title: row.title,
-        description: row.description,
         upvotes: row.upvotes,
         downvotes: row.downvotes,
         question_count: row.question_count,
-        created_at: row.created_at,
-        updated_at: row.updated_at,
-        posted_by_id: row.posted_by_id,
-        posted_by_username: row.posted_by_username,
-        posted_by_created_at: row.posted_by_created_at,
-    }];
-
-    let mut stats = build_statistic_responses(db_manager, rows, Some(token.user.user_id)).await?;
-    Ok(ServerSuccessResponse::new(stats.remove(0)))
+    };
+    Ok(ServerSuccessResponse::new(resp))
 }
 
 pub async fn delete_handler(
     State(app_state): State<AppState>,
     headers: HeaderMap,
     Path(id): Path<u64>,
-) -> AppServerResult<ServerSuccessResponse<StatisticResponse>> {
+) -> AppServerResult<ServerSuccessResponse<ResponseBody>> {
     let token =
         AccessToken::from_header_map_unverified(headers, app_state.config.get_jwt_token_secret())?;
 
@@ -103,7 +100,8 @@ pub async fn delete_handler(
             )
         })?;
 
-    let row = fetch_statistic_by_id::run_query(db_manager, id)
+
+    let row = fetch_statistic_metrics_by_id::run_query(db_manager, id)
         .await
         .map_err(|err| {
             tracing::error!(?err, "Failed to fetch statistic");
@@ -121,20 +119,11 @@ pub async fn delete_handler(
             )
         })?;
 
-    let rows = vec![StatisticRow {
+    let resp = ResponseBody {
         id: row.id,
-        title: row.title,
-        description: row.description,
         upvotes: row.upvotes,
         downvotes: row.downvotes,
         question_count: row.question_count,
-        created_at: row.created_at,
-        updated_at: row.updated_at,
-        posted_by_id: row.posted_by_id,
-        posted_by_username: row.posted_by_username,
-        posted_by_created_at: row.posted_by_created_at,
-    }];
-
-    let mut stats = build_statistic_responses(db_manager, rows, Some(token.user.user_id)).await?;
-    Ok(ServerSuccessResponse::new(stats.remove(0)))
+    };
+    Ok(ServerSuccessResponse::new(resp))
 }

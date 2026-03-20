@@ -4,6 +4,7 @@ pub mod fetch_author_ids_by_statistic_ids;
 pub mod fetch_sources_by_statistic_ids;
 pub mod fetch_statistic_by_id;
 pub mod fetch_statistic_ids_by_user_id;
+pub mod fetch_statistic_metrics_by_id;
 pub mod fetch_statistics;
 pub mod fetch_tags_by_statistic_ids;
 pub mod fetch_votes_by_statistic_ids;
