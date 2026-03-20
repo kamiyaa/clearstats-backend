@@ -21,6 +21,7 @@ pub async fn handler(
 
     let db_manager = app_state.get_db_manager();
 
+    tracing::debug!(id, ?current_user_id, "Get statistic");
     let row = fetch_statistic_by_id::run_query(db_manager, id, current_user_id)
         .await
         .map_err(|err| {
