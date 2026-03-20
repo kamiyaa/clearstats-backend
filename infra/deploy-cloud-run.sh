@@ -19,6 +19,7 @@ echo "Deploying services to cloud run"
 ######################################
 
 "$CWD/deploy/clearstats-auth.sh"
+"$CWD/deploy/clearstats-api.sh"
 
 ######################################
 

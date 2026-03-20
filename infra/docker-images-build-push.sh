@@ -17,6 +17,7 @@ echo "======================"
 BUILD_DIR=build
 ALL_SERVICES=(
     clearstats-auth
+    clearstats-api
 )
 
 echo "Building docker images..."

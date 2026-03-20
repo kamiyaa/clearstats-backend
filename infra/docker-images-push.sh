@@ -9,6 +9,7 @@ DOCKER_REGISTRY=$GCP_REGION-docker.pkg.dev
 
 ALL_SERVICES=(
     clearstats-auth
+    clearstats-api
 )
 
 echo "Pushing docker images to GCP..."

@@ -11,6 +11,7 @@ docker buildx build --build-arg \
 echo "Compiled all services."
 
 ALL_SERVICES=(
+    clearstats-api
     clearstats-auth
 )
 
