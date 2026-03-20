@@ -68,9 +68,9 @@ pub async fn handler(
                 downvotes: row.downvotes,
                 question_count: row.question_count,
                 created_at: row.created_at,
+                updated_at: row.updated_at,
                 posted_by_id: row.posted_by_id,
                 posted_by_username: row.posted_by_username,
-                posted_by_email: row.posted_by_email,
                 posted_by_created_at: row.posted_by_created_at,
             });
         }

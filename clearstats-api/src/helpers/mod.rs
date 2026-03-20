@@ -19,9 +19,9 @@ pub struct StatisticRow {
     pub downvotes: u64,
     pub question_count: u64,
     pub created_at: u64,
+    pub updated_at: u64,
     pub posted_by_id: u64,
     pub posted_by_username: String,
-    pub posted_by_email: String,
     pub posted_by_created_at: u64,
 }
 
@@ -202,6 +202,7 @@ pub async fn build_statistic_responses(
                 user_vote: user_votes.get(&row.id).copied(),
                 question_count: row.question_count,
                 created_at: unix_secs_to_iso(row.created_at),
+                updated_at: unix_secs_to_iso(row.updated_at),
             }
         })
         .collect();

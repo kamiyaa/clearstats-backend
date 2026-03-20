@@ -29,15 +29,19 @@ pub async fn run_query(
             q.upvotes,
             q.downvotes,
             q.created_at,
-            uc.id AS posted_by_id,
+            up.user_id AS posted_by_id,
             up.username AS posted_by_username,
-            uc.email AS posted_by_email,
             up.created_at AS posted_by_created_at
-        FROM question q
-        JOIN user_profile up ON q.posted_by_user_id = up.user_id
-        JOIN user_credential uc ON up.user_id = uc.id
-        WHERE q.statistic_id = ?
-        ORDER BY q.created_at ASC",
+        FROM
+            question q
+        INNER JOIN
+            user_profile up
+        ON
+            q.posted_by_user_id = up.user_id
+        WHERE
+            q.statistic_id = ?
+        ORDER BY
+            q.created_at ASC;",
     )
     .bind(statistic_id)
     .fetch_all(pool)

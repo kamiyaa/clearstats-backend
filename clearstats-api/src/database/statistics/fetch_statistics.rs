@@ -11,9 +11,9 @@ pub struct SqlData {
     pub downvotes: u64,
     pub question_count: u64,
     pub created_at: u64,
+    pub updated_at: u64,
     pub posted_by_id: u64,
     pub posted_by_username: String,
-    pub posted_by_email: String,
     pub posted_by_created_at: u64,
 }
 
@@ -41,15 +41,20 @@ pub async fn run_query(
                 s.downvotes,
                 s.question_count,
                 s.created_at,
-                uc.id AS posted_by_id,
+                s.updated_at,
+                up.user_id AS posted_by_id,
                 up.username AS posted_by_username,
-                uc.email AS posted_by_email,
                 up.created_at AS posted_by_created_at
-            FROM statistic s
-            JOIN user_profile up ON s.posted_by_user_id = up.user_id
-            JOIN user_credential uc ON up.user_id = uc.id
-            WHERE s.id IN (SELECT statistic_id FROM statistic_tag WHERE tag = ?)
-            AND (? = '' OR s.title LIKE ? OR s.description LIKE ?)
+            FROM
+                statistic s
+            INNER JOIN
+                user_profile up
+            ON
+                s.posted_by_user_id = up.user_id
+            WHERE s.id IN
+                (SELECT statistic_id FROM statistic_tag WHERE tag = ?)
+            AND
+                (? = '' OR s.title LIKE ? OR s.description LIKE ?)
             ORDER BY s.created_at DESC
             LIMIT ? OFFSET ?",
         )
@@ -74,16 +79,22 @@ pub async fn run_query(
             s.downvotes,
             s.question_count,
             s.created_at,
-            uc.id AS posted_by_id,
+            up.user_id AS posted_by_id,
             up.username AS posted_by_username,
-            uc.email AS posted_by_email,
             up.created_at AS posted_by_created_at
-        FROM statistic s
-        JOIN user_profile up ON s.posted_by_user_id = up.user_id
-        JOIN user_credential uc ON up.user_id = uc.id
-        WHERE (? = '' OR s.title LIKE ? OR s.description LIKE ?)
-        ORDER BY s.created_at DESC
-        LIMIT ? OFFSET ?",
+        FROM
+            statistic s
+        INNER JOIN
+            user_profile up
+        ON
+            s.posted_by_user_id = up.user_id
+        WHERE
+            (? = '' OR s.title LIKE ? OR s.description LIKE ?)
+        ORDER BY
+            s.created_at
+        DESC
+        LIMIT ?
+        OFFSET ?",
     )
     .bind(params.search)
     .bind(&search_pattern)

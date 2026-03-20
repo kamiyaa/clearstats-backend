@@ -18,12 +18,13 @@ pub async fn run_query(db_manager: &DatabaseManager, data: &SqlData<'_>) -> Data
     let mut tx = pool.begin().await?;
 
     let res = sqlx::query(
-        "INSERT INTO statistic (title, description, posted_by_user_id, created_at)
-         VALUES (?, ?, ?, ?)",
+        "INSERT INTO statistic (title, description, posted_by_user_id, created_at, updated_at)
+         VALUES (?, ?, ?, ?, ?)",
     )
     .bind(data.title)
     .bind(data.description)
     .bind(data.posted_by_user_id)
+    .bind(data.created_at)
     .bind(data.created_at)
     .execute(&mut *tx)
     .await?;

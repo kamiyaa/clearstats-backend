@@ -45,6 +45,7 @@ pub struct StatisticResponse {
     pub user_vote: Option<i8>,
     pub question_count: u64,
     pub created_at: String,
+    pub updated_at: String,
 }
 
 #[derive(Clone, Debug, Serialize, Deserialize)]

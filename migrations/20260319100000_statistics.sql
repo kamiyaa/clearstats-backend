@@ -17,6 +17,7 @@ CREATE TABLE IF NOT EXISTS statistic (
     downvotes BIGINT UNSIGNED NOT NULL DEFAULT 0,
     question_count BIGINT UNSIGNED NOT NULL DEFAULT 0,
     created_at BIGINT UNSIGNED NOT NULL,
+    updated_at BIGINT UNSIGNED NOT NULL,
 
     PRIMARY KEY (id)
 );

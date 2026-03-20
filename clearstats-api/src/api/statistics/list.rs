@@ -76,9 +76,9 @@ pub async fn handler(
             downvotes: r.downvotes,
             question_count: r.question_count,
             created_at: r.created_at,
+            updated_at: r.updated_at,
             posted_by_id: r.posted_by_id,
             posted_by_username: r.posted_by_username,
-            posted_by_email: r.posted_by_email,
             posted_by_created_at: r.posted_by_created_at,
         })
         .collect();
