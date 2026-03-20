@@ -21,8 +21,24 @@ pub fn allow_origin_list() -> AllowOrigin {
 pub fn all_origin_cors() -> CorsLayer {
     CorsLayer::new()
         .allow_origin(Any)
-        .allow_headers(AllowHeaders::any())
-        .allow_methods(AllowMethods::any())
+        .allow_headers([
+            header::AUTHORIZATION,
+            header::ACCEPT,
+            header::ACCEPT_ENCODING,
+            header::ACCEPT_LANGUAGE,
+            header::CONNECTION,
+            header::CONTENT_ENCODING,
+            header::CONTENT_LENGTH,
+            header::CONTENT_RANGE,
+            header::CONTENT_TYPE,
+        ])
+        .allow_methods([
+            Method::GET,
+            Method::POST,
+            Method::DELETE,
+            Method::PUT,
+            Method::PATCH,
+        ])
 }
 
 /// used by auth service to allow setting and removing cookies
