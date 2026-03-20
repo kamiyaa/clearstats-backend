@@ -21,6 +21,8 @@ pub async fn handler(app_state: &AppState, message: Message) -> AppServerResult 
         verification_code,
     } = message;
 
+    tracing::debug!(email, verification_code, "Verification code");
+
     let subject = "Email Verification Code".to_string();
     let email_content = generate_invite_email_content(&verification_code);
     let html_email_content = generate_invite_email_html_content(&verification_code);
