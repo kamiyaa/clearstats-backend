@@ -43,7 +43,7 @@ pub struct StatisticResponse {
     pub posted_by: UserResponse,
     pub upvotes: DatabaseInteger,
     pub downvotes: DatabaseInteger,
-    pub user_vote: Option<i8>,
+    pub user_vote: Option<i16>,
     pub question_count: DatabaseInteger,
     pub created_at: String,
     pub updated_at: String,
@@ -57,6 +57,6 @@ pub struct QuestionResponse {
     pub posted_by: UserResponse,
     pub upvotes: DatabaseInteger,
     pub downvotes: DatabaseInteger,
-    pub user_vote: Option<i8>,
+    pub user_vote: Option<i16>,
     pub created_at: String,
 }

@@ -1,5 +1,5 @@
-use shared_lib::database::{DatabaseBoolean, DatabaseInteger, DatabaseResult};
 use shared_lib::database::tables::user::{TABLE_USER_CREDENTIAL, TABLE_USER_PROFILE};
+use shared_lib::database::{DatabaseBoolean, DatabaseInteger, DatabaseResult};
 use sqlx::FromRow;
 
 use shared_lib::database::manager::{DatabaseManager, DatabaseManagerTrait};

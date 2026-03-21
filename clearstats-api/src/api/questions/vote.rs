@@ -16,7 +16,7 @@ use crate::utils::time::unix_secs_to_iso;
 
 #[derive(Debug, Deserialize)]
 pub struct VoteBody {
-    pub vote: i8,
+    pub vote: i16,
 }
 
 pub async fn upsert_handler(

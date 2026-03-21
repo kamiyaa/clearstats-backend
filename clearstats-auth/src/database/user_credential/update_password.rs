@@ -1,6 +1,6 @@
-use shared_lib::database::{DatabaseInteger, DatabaseResult};
 use shared_lib::database::manager::{DatabaseManager, DatabaseManagerTrait};
 use shared_lib::database::tables::user::TABLE_USER_CREDENTIAL;
+use shared_lib::database::{DatabaseInteger, DatabaseResult};
 
 #[derive(Clone, Debug)]
 pub struct SqlData {

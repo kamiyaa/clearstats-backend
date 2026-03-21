@@ -1,5 +1,5 @@
-use shared_lib::database::{DatabaseInteger, DatabaseResult};
 use shared_lib::database::manager::{DatabaseManager, DatabaseManagerTrait};
+use shared_lib::database::{DatabaseInteger, DatabaseResult};
 use sqlx::FromRow;
 
 #[derive(Clone, Debug, FromRow)]
@@ -9,7 +9,7 @@ pub struct SqlData {
     pub description: String,
     pub upvotes: DatabaseInteger,
     pub downvotes: DatabaseInteger,
-    pub user_vote: Option<i8>,
+    pub user_vote: Option<i16>,
     pub question_count: DatabaseInteger,
     pub created_at: DatabaseInteger,
     pub updated_at: DatabaseInteger,

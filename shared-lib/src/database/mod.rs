@@ -10,7 +10,7 @@ use crate::error::{AppServerResult, ServerErrorResponse};
 pub static DEFAULT_MIGRATOR: Migrator = sqlx::migrate!("../migrations");
 
 pub type DatabaseInteger = i64;
-pub type DatabaseBoolean = i8;
+pub type DatabaseBoolean = bool;
 
 pub type DatabasePool = sqlx::Pool<Postgres>;
 pub type DatabaseTransaction = sqlx::Transaction<'static, Postgres>;

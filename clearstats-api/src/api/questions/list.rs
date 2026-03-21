@@ -37,7 +37,7 @@ pub async fn handler(
 
     let question_ids: Vec<DatabaseInteger> = rows.iter().map(|r| r.id).collect();
 
-    let votes: HashMap<DatabaseInteger, i8> = if let Some(user_id) = current_user_id {
+    let votes: HashMap<DatabaseInteger, i16> = if let Some(user_id) = current_user_id {
         fetch_votes_by_question_ids::run_query(db_manager, &question_ids, user_id)
             .await
             .map_err(|err| {

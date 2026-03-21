@@ -1,6 +1,9 @@
 use axum::http::StatusCode;
 use shared_lib::{
-    config::{env::Environment, service_config::ServiceConfig}, database::DatabaseInteger, error::{AppServerResult, ServerErrorResponse}, utils
+    config::{env::Environment, service_config::ServiceConfig},
+    database::DatabaseInteger,
+    error::{AppServerResult, ServerErrorResponse},
+    utils,
 };
 
 #[derive(Clone, Debug)]

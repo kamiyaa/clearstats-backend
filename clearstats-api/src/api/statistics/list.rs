@@ -6,10 +6,10 @@ use shared_lib::database::DatabaseInteger;
 use shared_lib::error::{AppServerResult, ServerErrorResponse, ServerSuccessResponse};
 use shared_lib::types::jwt::AccessToken;
 
-use crate::{AppState, PAGE_SIZE};
 use crate::database::statistics::fetch_statistics;
 use crate::helpers::{StatisticRow, build_statistic_responses};
-use crate::types::{StatisticResponse};
+use crate::types::StatisticResponse;
+use crate::{AppState, PAGE_SIZE};
 
 #[derive(Debug, Deserialize)]
 pub struct QueryParams {
@@ -49,19 +49,16 @@ pub async fn handler(
     };
 
     tracing::debug!(?sql_query, "Fetching statistics");
-    let rows = fetch_statistics::run_query(
-        db_manager,
-        &sql_query,
-    )
-    .await
-    .map_err(|err| {
-        tracing::error!(?err, "Failed to fetch statistics");
-        ServerErrorResponse::new(
-            StatusCode::INTERNAL_SERVER_ERROR,
-            1234,
-            "Failed to fetch statistics".to_string(),
-        )
-    })?;
+    let rows = fetch_statistics::run_query(db_manager, &sql_query)
+        .await
+        .map_err(|err| {
+            tracing::error!(?err, "Failed to fetch statistics");
+            ServerErrorResponse::new(
+                StatusCode::INTERNAL_SERVER_ERROR,
+                1234,
+                "Failed to fetch statistics".to_string(),
+            )
+        })?;
 
     let rows: Vec<StatisticRow> = rows
         .into_iter()
@@ -82,8 +79,6 @@ pub async fn handler(
         .collect();
     let items = build_statistic_responses(db_manager, rows).await?;
 
-    let resp = ResponseBody {
-        items
-    };
+    let resp = ResponseBody { items };
     Ok(ServerSuccessResponse::new(resp))
 }

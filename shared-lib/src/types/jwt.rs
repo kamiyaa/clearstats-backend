@@ -4,7 +4,9 @@ use jsonwebtoken::{DecodingKey, TokenData, Validation, decode};
 use serde::{Deserialize, Serialize};
 
 use crate::{
-    database::{DatabaseInteger}, error::{AppServerResult, ServerErrorResponse}, utils::time::get_secs_since_epoch
+    database::DatabaseInteger,
+    error::{AppServerResult, ServerErrorResponse},
+    utils::time::get_secs_since_epoch,
 };
 
 pub const COOKIE_REFRESH_TOKEN: &str = "REFRESH_TOKEN";

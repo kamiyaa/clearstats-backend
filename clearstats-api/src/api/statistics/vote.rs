@@ -12,7 +12,7 @@ use crate::database::statistics::{delete_vote, fetch_statistic_metrics_by_id, up
 
 #[derive(Clone, Debug, Deserialize)]
 pub struct RequestBody {
-    pub vote: i8,
+    pub vote: i16,
 }
 
 #[derive(Clone, Debug, Serialize)]
@@ -100,7 +100,6 @@ pub async fn delete_handler(
                 "Failed to remove vote".to_string(),
             )
         })?;
-
 
     let row = fetch_statistic_metrics_by_id::run_query(db_manager, id)
         .await

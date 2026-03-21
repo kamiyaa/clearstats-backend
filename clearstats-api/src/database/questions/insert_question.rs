@@ -1,5 +1,5 @@
-use shared_lib::database::{DatabaseInteger, DatabaseResult};
 use shared_lib::database::manager::{DatabaseManager, DatabaseManagerTrait};
+use shared_lib::database::{DatabaseInteger, DatabaseResult};
 use shared_lib::types::database::SqlId;
 use sqlx::FromRow;
 

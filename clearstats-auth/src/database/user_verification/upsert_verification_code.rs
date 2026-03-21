@@ -1,6 +1,6 @@
-use shared_lib::database::{DatabaseResult, DatabaseInteger};
 use shared_lib::database::manager::{DatabaseManager, DatabaseManagerTrait};
 use shared_lib::database::tables::user::TABLE_USER_EMAIL_VERIFTCATION;
+use shared_lib::database::{DatabaseInteger, DatabaseResult};
 
 pub async fn run_query(
     db_manager: &DatabaseManager,

@@ -1,8 +1,8 @@
 use sqlx::FromRow;
 
-use shared_lib::database::{DatabaseInteger, DatabaseResult};
 use shared_lib::database::manager::{DatabaseManager, DatabaseManagerTrait};
 use shared_lib::database::tables::user::{TABLE_USER_PASSWORD_RESET, TABLE_USER_PROFILE};
+use shared_lib::database::{DatabaseInteger, DatabaseResult};
 
 #[derive(Clone, Debug, FromRow)]
 pub struct SqlData {

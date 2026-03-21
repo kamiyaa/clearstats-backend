@@ -114,7 +114,7 @@ pub async fn handler(
         username: user.username,
         first_name: user.first_name,
         last_name: user.last_name,
-        verified: user.email_verified > 0,
+        verified: user.email_verified,
         icon_hash: user.icon_hash,
     };
 

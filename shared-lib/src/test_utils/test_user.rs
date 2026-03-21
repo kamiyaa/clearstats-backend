@@ -1,8 +1,10 @@
 use crate::{
-    database::{DatabaseInteger}, error::AppServerResult, types::{
+    database::DatabaseInteger,
+    error::AppServerResult,
+    types::{
         jwt::{self, UserClaims},
         user::UserProfileBrief,
-    }
+    },
 };
 
 use super::jwt::generate_access_token;

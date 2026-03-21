@@ -1,5 +1,5 @@
-use shared_lib::database::{DatabaseInteger, DatabaseResult};
 use shared_lib::database::manager::{DatabaseManager, DatabaseManagerTrait};
+use shared_lib::database::{DatabaseInteger, DatabaseResult};
 use shared_lib::types::database::SqlId;
 use sqlx::FromRow;
 
@@ -25,14 +25,15 @@ pub async fn run_query(
 ) -> DatabaseResult<AuthorRow> {
     let pool = db_manager.get_database_pool();
 
-    let res: SqlId =
-        sqlx::query_as("INSERT INTO author (name, bio, avatar_url, affiliation) VALUES (?, ?, ?, ?) RETURNING id")
-            .bind(data.name)
-            .bind(data.bio)
-            .bind(data.avatar_url)
-            .bind(data.affiliation)
-            .fetch_one(pool)
-            .await?;
+    let res: SqlId = sqlx::query_as(
+        "INSERT INTO author (name, bio, avatar_url, affiliation) VALUES (?, ?, ?, ?) RETURNING id",
+    )
+    .bind(data.name)
+    .bind(data.bio)
+    .bind(data.avatar_url)
+    .bind(data.affiliation)
+    .fetch_one(pool)
+    .await?;
 
     let author_id = res.id;
 

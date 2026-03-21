@@ -1,7 +1,10 @@
 use axum::http::StatusCode;
 use chrono::{DateTime, Utc};
 
-use crate::{database::DatabaseInteger, error::{AppServerResult, ServerErrorResponse}};
+use crate::{
+    database::DatabaseInteger,
+    error::{AppServerResult, ServerErrorResponse},
+};
 
 pub fn get_secs_since_epoch() -> AppServerResult<DatabaseInteger> {
     let now = Utc::now();

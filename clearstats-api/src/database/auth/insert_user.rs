@@ -1,5 +1,5 @@
-use shared_lib::database::{DatabaseInteger, DatabaseResult};
 use shared_lib::database::manager::{DatabaseManager, DatabaseManagerTrait};
+use shared_lib::database::{DatabaseInteger, DatabaseResult};
 use shared_lib::types::database::SqlId;
 
 pub struct SqlData {
@@ -12,19 +12,23 @@ pub struct SqlData {
     pub created_at: DatabaseInteger,
 }
 
-pub async fn run_query(db_manager: &DatabaseManager, data: &SqlData) -> DatabaseResult<DatabaseInteger> {
+pub async fn run_query(
+    db_manager: &DatabaseManager,
+    data: &SqlData,
+) -> DatabaseResult<DatabaseInteger> {
     let pool = db_manager.get_database_pool();
 
-    let res: SqlId =
-        sqlx::query_as("INSERT INTO user_credential
+    let res: SqlId = sqlx::query_as(
+        "INSERT INTO user_credential
             (email, password_hash, salt)
         VALUES (?, ?, ?)
-        RETURNING id;")
-            .bind(&data.email)
-            .bind(&data.password_hash)
-            .bind(&data.salt)
-            .fetch_one(pool)
-            .await?;
+        RETURNING id;",
+    )
+    .bind(&data.email)
+    .bind(&data.password_hash)
+    .bind(&data.salt)
+    .fetch_one(pool)
+    .await?;
 
     let user_id = res.id;
 

@@ -19,7 +19,7 @@ pub struct StatisticRow {
     pub description: String,
     pub upvotes: DatabaseInteger,
     pub downvotes: DatabaseInteger,
-    pub user_vote: Option<i8>,
+    pub user_vote: Option<i16>,
     pub question_count: DatabaseInteger,
     pub created_at: DatabaseInteger,
     pub updated_at: DatabaseInteger,
@@ -147,7 +147,8 @@ pub async fn build_statistic_responses(
         })
         .collect();
 
-    let mut author_ids_by_statistic: HashMap<DatabaseInteger, Vec<DatabaseInteger>> = HashMap::new();
+    let mut author_ids_by_statistic: HashMap<DatabaseInteger, Vec<DatabaseInteger>> =
+        HashMap::new();
     for r in author_id_rows {
         author_ids_by_statistic
             .entry(r.statistic_id)

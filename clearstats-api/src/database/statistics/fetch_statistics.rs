@@ -1,5 +1,5 @@
-use shared_lib::database::{DatabaseInteger, DatabaseResult};
 use shared_lib::database::manager::{DatabaseManager, DatabaseManagerTrait};
+use shared_lib::database::{DatabaseInteger, DatabaseResult};
 use sqlx::FromRow;
 
 #[derive(Clone, Debug, FromRow)]
@@ -10,7 +10,7 @@ pub struct SqlData {
     pub upvotes: DatabaseInteger,
     pub downvotes: DatabaseInteger,
     pub question_count: DatabaseInteger,
-    pub user_vote: Option<i8>,
+    pub user_vote: Option<i16>,
     pub created_at: DatabaseInteger,
     pub updated_at: DatabaseInteger,
     pub posted_by_id: DatabaseInteger,
@@ -74,14 +74,11 @@ pub async fn run_query(
         LIMIT ? OFFSET ?"
     );
 
-    let mut sql_res = sqlx::query_as(&sql_query)
-        .bind(params.user_id);
+    let mut sql_res = sqlx::query_as(&sql_query).bind(params.user_id);
 
     if let Some(v) = params.search.as_ref() {
         let search_pattern = format!("%{}%", v);
-        sql_res = sql_res
-            .bind(search_pattern.clone())
-            .bind(search_pattern);
+        sql_res = sql_res.bind(search_pattern.clone()).bind(search_pattern);
     }
     if let Some(v) = params.tag.as_ref() {
         sql_res = sql_res.bind(v);

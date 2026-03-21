@@ -1,5 +1,5 @@
-use shared_lib::database::{DatabaseInteger, DatabaseResult};
 use shared_lib::database::manager::{DatabaseManager, DatabaseManagerTrait};
+use shared_lib::database::{DatabaseInteger, DatabaseResult};
 use shared_lib::types::database::SqlId;
 
 pub struct SqlData<'a> {
@@ -13,7 +13,10 @@ pub struct SqlData<'a> {
     pub created_at: DatabaseInteger,
 }
 
-pub async fn run_query(db_manager: &DatabaseManager, data: &SqlData<'_>) -> DatabaseResult<DatabaseInteger> {
+pub async fn run_query(
+    db_manager: &DatabaseManager,
+    data: &SqlData<'_>,
+) -> DatabaseResult<DatabaseInteger> {
     let pool = db_manager.get_database_pool();
 
     let mut tx = pool.begin().await?;
