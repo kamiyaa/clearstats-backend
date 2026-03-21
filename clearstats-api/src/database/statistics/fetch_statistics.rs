@@ -33,14 +33,25 @@ pub async fn run_query(
 ) -> DatabaseResult<Vec<SqlData>> {
     let pool = db_manager.get_database_pool();
 
+    let mut next_param = 2usize; // $1 is user_id
     let search_query = match params.search.as_ref() {
-        Some(_) => "AND (s.title LIKE ? OR s.description LIKE ?)",
-        None => "",
-    };
-    let tag_query = match params.tag.as_ref() {
-        Some(_) => format!("AND s.id IN (SELECT statistic_id FROM statistic_tag WHERE tag = ?)"),
+        Some(_) => {
+            let q = format!("AND (s.title LIKE ${} OR s.description LIKE ${})", next_param, next_param + 1);
+            next_param += 2;
+            q
+        }
         None => String::new(),
     };
+    let tag_query = match params.tag.as_ref() {
+        Some(_) => {
+            let q = format!("AND s.id IN (SELECT statistic_id FROM statistic_tag WHERE tag = ${})", next_param);
+            next_param += 1;
+            q
+        }
+        None => String::new(),
+    };
+    let limit_ph = format!("${}", next_param);
+    let offset_ph = format!("${}", next_param + 1);
 
     let sql_query = format!(
         "SELECT
@@ -67,11 +78,11 @@ pub async fn run_query(
         ON
             s_vote.statistic_id = s.id
         WHERE
-            s_vote.user_id = ?
+            s_vote.user_id = $1
             {search_query}
             {tag_query}
         ORDER BY s.created_at DESC
-        LIMIT ? OFFSET ?"
+        LIMIT {limit_ph} OFFSET {offset_ph}"
     );
 
     let mut sql_res = sqlx::query_as(&sql_query).bind(params.user_id);

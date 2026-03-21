@@ -39,7 +39,7 @@ pub async fn run_query(
         ON
             q.posted_by_user_id = up.user_id
         WHERE
-            q.statistic_id = ?
+            q.statistic_id = $1
         ORDER BY
             q.created_at ASC;",
     )

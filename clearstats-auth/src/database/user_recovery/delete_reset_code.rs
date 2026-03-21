@@ -10,7 +10,7 @@ pub async fn run_query(db_manager: &DatabaseManager, user_id: DatabaseInteger) -
         DELETE FROM
             {TABLE_USER_PASSWORD_RESET}
         WHERE
-            user_id = ?
+            user_id = $1
         ;"
     );
 

@@ -17,10 +17,10 @@ pub async fn run_query(db_manager: &DatabaseManager, data: &SqlData) -> Database
         UPDATE
             {TABLE_USER_CREDENTIAL}
         SET
-            password_hash = ?,
-            salt = ?
+            password_hash = $1,
+            salt = $2
         WHERE
-            id = ?
+            id = $3
         ;"
     );
     let sql_res = sqlx::query(&sql_query)

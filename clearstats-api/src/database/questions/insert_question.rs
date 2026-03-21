@@ -31,7 +31,7 @@ pub async fn run_query(
 
     let res: SqlId = sqlx::query_as(
         "INSERT INTO question (statistic_id, body, posted_by_user_id, created_at)
-         VALUES (?, ?, ?, ?)
+         VALUES ($1, $2, $3, $4)
          RETURNING id;",
     )
     .bind(data.statistic_id)
@@ -43,7 +43,7 @@ pub async fn run_query(
 
     let question_id = res.id;
 
-    sqlx::query("UPDATE statistic SET question_count = question_count + 1 WHERE id = ?")
+    sqlx::query("UPDATE statistic SET question_count = question_count + 1 WHERE id = $1")
         .bind(data.statistic_id)
         .execute(pool)
         .await?;
@@ -66,7 +66,7 @@ pub async fn run_query(
         ON
             q.posted_by_user_id = up.user_id
         WHERE
-            q.id = ?",
+            q.id = $1",
     )
     .bind(question_id)
     .fetch_one(pool)

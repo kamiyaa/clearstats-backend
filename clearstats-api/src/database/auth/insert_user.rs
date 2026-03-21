@@ -21,7 +21,7 @@ pub async fn run_query(
     let res: SqlId = sqlx::query_as(
         "INSERT INTO user_credential
             (email, password_hash, salt)
-        VALUES (?, ?, ?)
+        VALUES ($1, $2, $3)
         RETURNING id;",
     )
     .bind(&data.email)
@@ -34,7 +34,7 @@ pub async fn run_query(
 
     sqlx::query(
         "INSERT INTO user_profile (user_id, username, first_name, last_name, created_at, updated_at)
-         VALUES (?, ?, ?, ?, ?, ?)",
+         VALUES ($1, $2, $3, $4, $5, $6)",
     )
     .bind(user_id)
     .bind(&data.username)

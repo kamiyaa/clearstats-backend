@@ -30,9 +30,9 @@ pub async fn run_query(
         ON
             p_reset.user_id = user_profile.user_id
         WHERE
-            p_reset.code = ?
+            p_reset.code = $1
         AND
-            user_profile.username = ?
+            user_profile.username = $2
         ;"
     );
     let sql_res = sqlx::query_as(&sql_query)

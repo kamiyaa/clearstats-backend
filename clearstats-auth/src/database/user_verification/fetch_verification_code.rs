@@ -16,9 +16,9 @@ pub async fn run_query(
         FROM
             {TABLE_USER_EMAIL_VERIFTCATION}
         WHERE
-            email = ?
+            email = $1
         AND
-            verification_code = ?
+            verification_code = $2
         ;"
     );
     let sql_res = sqlx::query(&sql_query)

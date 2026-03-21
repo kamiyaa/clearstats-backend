@@ -23,7 +23,7 @@ pub async fn run_query(
 
     let res: SqlId = sqlx::query_as(
         "INSERT INTO statistic (title, description, posted_by_user_id, created_at, updated_at)
-         VALUES (?, ?, ?, ?, ?)
+         VALUES ($1, $2, $3, $4, $5)
          RETURNING id;",
     )
     .bind(data.title)
@@ -37,7 +37,7 @@ pub async fn run_query(
     let statistic_id = res.id;
 
     for tag in data.tags {
-        sqlx::query("INSERT INTO statistic_tag (statistic_id, tag) VALUES (?, ?)")
+        sqlx::query("INSERT INTO statistic_tag (statistic_id, tag) VALUES ($1, $2)")
             .bind(statistic_id)
             .bind(tag)
             .execute(&mut *tx)
@@ -45,7 +45,7 @@ pub async fn run_query(
     }
 
     for (url, title) in data.sources {
-        sqlx::query("INSERT INTO statistic_source (statistic_id, url, title) VALUES (?, ?, ?)")
+        sqlx::query("INSERT INTO statistic_source (statistic_id, url, title) VALUES ($1, $2, $3)")
             .bind(statistic_id)
             .bind(url)
             .bind(title.as_deref())
@@ -55,7 +55,7 @@ pub async fn run_query(
 
     for (url, filename) in data.attachments {
         sqlx::query(
-            "INSERT INTO statistic_attachment (statistic_id, url, filename) VALUES (?, ?, ?)",
+            "INSERT INTO statistic_attachment (statistic_id, url, filename) VALUES ($1, $2, $3)",
         )
         .bind(statistic_id)
         .bind(url)
@@ -65,7 +65,7 @@ pub async fn run_query(
     }
 
     for author_id in data.author_ids {
-        sqlx::query("INSERT INTO statistic_author (statistic_id, author_id) VALUES (?, ?)")
+        sqlx::query("INSERT INTO statistic_author (statistic_id, author_id) VALUES ($1, $2)")
             .bind(statistic_id)
             .bind(author_id)
             .execute(&mut *tx)

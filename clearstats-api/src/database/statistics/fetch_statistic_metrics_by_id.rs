@@ -28,7 +28,7 @@ pub async fn run_query(
         FROM
             statistic s
         WHERE
-            s.id = ?",
+            s.id = $1",
     )
     .bind(statistic_id)
     .fetch_optional(pool)

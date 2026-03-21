@@ -9,7 +9,7 @@ pub async fn run_query(db_manager: &DatabaseManager, email: &str) -> DatabaseRes
         "
         DELETE FROM {TABLE_EMAIL_CHANGE_REQUEST}
         WHERE
-            pending_email = ?
+            pending_email = $1
         ;"
     );
 

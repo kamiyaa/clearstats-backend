@@ -17,13 +17,12 @@ pub async fn run_query(
         return Ok(vec![]);
     }
     let pool = db_manager.get_database_pool();
-    let placeholders = statistic_ids
-        .iter()
-        .map(|_| "?")
+    let placeholders = (2..=statistic_ids.len() + 1)
+        .map(|i| format!("${}", i))
         .collect::<Vec<_>>()
         .join(", ");
     let sql = format!(
-        "SELECT statistic_id, vote FROM statistic_vote WHERE user_id = ? AND statistic_id IN ({placeholders})"
+        "SELECT statistic_id, vote FROM statistic_vote WHERE user_id = $1 AND statistic_id IN ({placeholders})"
     );
     let mut query = sqlx::query_as(&sql).bind(user_id);
     for id in statistic_ids {

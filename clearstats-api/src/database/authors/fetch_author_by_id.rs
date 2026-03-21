@@ -17,7 +17,7 @@ pub async fn run_query(
 ) -> DatabaseResult<Option<SqlData>> {
     let pool = db_manager.get_database_pool();
     let sql_res =
-        sqlx::query_as("SELECT id, name, bio, avatar_url, affiliation FROM author WHERE id = ?")
+        sqlx::query_as("SELECT id, name, bio, avatar_url, affiliation FROM author WHERE id = $1")
             .bind(author_id)
             .fetch_optional(pool)
             .await?;

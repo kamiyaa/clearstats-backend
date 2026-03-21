@@ -26,7 +26,7 @@ pub async fn run_query(
     let pool = db_manager.get_database_pool();
 
     let res: SqlId = sqlx::query_as(
-        "INSERT INTO author (name, bio, avatar_url, affiliation) VALUES (?, ?, ?, ?) RETURNING id",
+        "INSERT INTO author (name, bio, avatar_url, affiliation) VALUES ($1, $2, $3, $4) RETURNING id",
     )
     .bind(data.name)
     .bind(data.bio)
@@ -38,7 +38,7 @@ pub async fn run_query(
     let author_id = res.id;
 
     let row: AuthorRow =
-        sqlx::query_as("SELECT id, name, bio, avatar_url, affiliation FROM author WHERE id = ?")
+        sqlx::query_as("SELECT id, name, bio, avatar_url, affiliation FROM author WHERE id = $1")
             .bind(author_id)
             .fetch_one(pool)
             .await?;

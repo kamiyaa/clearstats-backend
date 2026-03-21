@@ -21,9 +21,9 @@ pub async fn run_query(db_manager: &DatabaseManager, data: &SqlData) -> Database
             UPDATE
                 {TABLE_USER_CREDENTIAL}
             SET
-                email = ?
+                email = $1
             WHERE
-                id = ?
+                id = $2
             ;"
         );
         let sql_res = sqlx::query(&sql_query)
@@ -44,10 +44,10 @@ pub async fn run_query(db_manager: &DatabaseManager, data: &SqlData) -> Database
 UPDATE
     {TABLE_USER_PROFILE}
 SET
-    first_name = ?,
-    last_name = ?
+    first_name = $1,
+    last_name = $2
 WHERE
-    user_id = ?
+    user_id = $3
 ;"
         );
         let sql_res = sqlx::query(&sql_query)

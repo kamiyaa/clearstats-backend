@@ -14,9 +14,9 @@ pub async fn run_query(
 UPDATE
     {TABLE_USER_CREDENTIAL}
 SET
-    email_verified = ?
+    email_verified = $1
 WHERE
-    email = ?
+    email = $2
 ;"
     );
 

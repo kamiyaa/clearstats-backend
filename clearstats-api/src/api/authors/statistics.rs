@@ -26,7 +26,7 @@ pub async fn handler(
 
     // Get statistic IDs for this author
     let id_rows: Vec<(DatabaseInteger,)> = sqlx::query_as(
-        "SELECT statistic_id FROM statistic_author WHERE author_id = ? ORDER BY statistic_id DESC",
+        "SELECT statistic_id FROM statistic_author WHERE author_id = $1 ORDER BY statistic_id DESC",
     )
     .bind(author_id)
     .fetch_all(db_manager.get_database_pool())

@@ -13,7 +13,7 @@ pub async fn run_query(
 ) -> DatabaseResult<Vec<SqlData>> {
     let pool = db_manager.get_database_pool();
     let results = sqlx::query_as(
-        "SELECT id FROM statistic WHERE posted_by_user_id = ? ORDER BY created_at DESC",
+        "SELECT id FROM statistic WHERE posted_by_user_id = $1 ORDER BY created_at DESC",
     )
     .bind(user_id)
     .fetch_all(pool)

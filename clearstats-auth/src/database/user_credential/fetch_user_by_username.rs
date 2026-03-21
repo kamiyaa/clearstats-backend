@@ -43,7 +43,7 @@ pub async fn run_query(
         ON
             user_cred.id = user_profile.user_id
         AND
-            user_profile.username = ?
+            user_profile.username = $1
     ;"
     );
     let sql_res = sqlx::query_as(&sql_query)

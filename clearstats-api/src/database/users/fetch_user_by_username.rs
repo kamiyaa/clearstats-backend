@@ -22,7 +22,7 @@ pub async fn run_query(
             up.created_at
         FROM user_profile up
         INNER JOIN user_credential uc ON up.user_id = uc.id
-        WHERE up.username = ?",
+        WHERE up.username = $1",
     )
     .bind(username)
     .fetch_optional(pool)

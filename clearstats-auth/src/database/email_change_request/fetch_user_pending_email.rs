@@ -16,7 +16,7 @@ pub async fn run_query(
         FROM
             {TABLE_EMAIL_CHANGE_REQUEST}
         WHERE
-            user_id = ?
+            user_id = $1
         ;"
     );
 

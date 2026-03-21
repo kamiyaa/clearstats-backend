@@ -16,7 +16,7 @@ pub async fn run_query(
         FROM
             {TABLE_USER_CREDENTIAL} user_cred
         WHERE
-            user_cred.id = ?
+            user_cred.id = $1
         ;"
     );
 

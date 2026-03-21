@@ -49,9 +49,9 @@ pub async fn run_query(
     ON
         s_vote.statistic_id = s.id
     AND
-        s_vote.user_id = ?
+        s_vote.user_id = $1
     WHERE
-        s.id = ?";
+        s.id = $2";
 
     let sql_res = sqlx::query_as(sql_query)
         .bind(user_id)

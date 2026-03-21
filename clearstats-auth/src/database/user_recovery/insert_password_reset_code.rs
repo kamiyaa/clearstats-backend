@@ -15,11 +15,10 @@ pub async fn run_query(
         INSERT INTO {TABLE_USER_PASSWORD_RESET}
             (user_id, code, expires_at)
         VALUES
-            (?, ?, ?)
-        ON DUPLICATE KEY
-        UPDATE
-            code = VALUES(code),
-            expires_at = VALUES(expires_at)
+            ($1, $2, $3)
+        ON CONFLICT (user_id) DO UPDATE SET
+            code = EXCLUDED.code,
+            expires_at = EXCLUDED.expires_at
         ;"
     );
 

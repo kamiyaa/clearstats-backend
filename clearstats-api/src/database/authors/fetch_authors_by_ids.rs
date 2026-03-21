@@ -19,9 +19,8 @@ pub async fn run_query(
         return Ok(vec![]);
     }
     let pool = db_manager.get_database_pool();
-    let placeholders = author_ids
-        .iter()
-        .map(|_| "?")
+    let placeholders = (1..=author_ids.len())
+        .map(|i| format!("${}", i))
         .collect::<Vec<_>>()
         .join(", ");
     let sql = format!(

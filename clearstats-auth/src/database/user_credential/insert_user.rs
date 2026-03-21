@@ -30,7 +30,7 @@ pub async fn run_query(
         INSERT INTO {TABLE_USER_CREDENTIAL}
             (email, password_hash, salt, email_verified)
         VALUES
-            (?, ?, ?, ?)
+            ($1, $2, $3, $4)
         RETURNING id;
         "
     );
@@ -49,8 +49,8 @@ pub async fn run_query(
             (user_id, username, first_name, last_name,
                 created_at, updated_at)
         VALUES
-            (?, ?, ?, ?,
-                ?, ?)
+            ($1, $2, $3, $4,
+                $5, $6)
     ;"
     );
     let sql_res = sqlx::query(&sql_query)

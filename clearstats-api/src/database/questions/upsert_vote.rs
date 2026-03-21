@@ -12,9 +12,9 @@ pub async fn run_query(
     // Remove existing vote contribution
     sqlx::query(
         "UPDATE question
-         SET upvotes = upvotes - IF((SELECT vote FROM question_vote WHERE question_id = ? AND user_id = ?) = 1, 1, 0),
-             downvotes = downvotes - IF((SELECT vote FROM question_vote WHERE question_id = ? AND user_id = ?) = -1, 1, 0)
-         WHERE id = ?",
+         SET upvotes = upvotes - CASE WHEN (SELECT vote FROM question_vote WHERE question_id = $1 AND user_id = $2) = 1 THEN 1 ELSE 0 END,
+             downvotes = downvotes - CASE WHEN (SELECT vote FROM question_vote WHERE question_id = $3 AND user_id = $4) = -1 THEN 1 ELSE 0 END
+         WHERE id = $5",
     )
     .bind(question_id)
     .bind(user_id)
@@ -26,8 +26,8 @@ pub async fn run_query(
 
     sqlx::query(
         "INSERT INTO question_vote (question_id, user_id, vote)
-         VALUES (?, ?, ?)
-         ON DUPLICATE KEY UPDATE vote = VALUES(vote)",
+         VALUES ($1, $2, $3)
+         ON CONFLICT (question_id, user_id) DO UPDATE SET vote = EXCLUDED.vote",
     )
     .bind(question_id)
     .bind(user_id)
@@ -36,12 +36,12 @@ pub async fn run_query(
     .await?;
 
     if vote == 1 {
-        sqlx::query("UPDATE question SET upvotes = upvotes + 1 WHERE id = ?")
+        sqlx::query("UPDATE question SET upvotes = upvotes + 1 WHERE id = $1")
             .bind(question_id)
             .execute(pool)
             .await?;
     } else {
-        sqlx::query("UPDATE question SET downvotes = downvotes + 1 WHERE id = ?")
+        sqlx::query("UPDATE question SET downvotes = downvotes + 1 WHERE id = $1")
             .bind(question_id)
             .execute(pool)
             .await?;

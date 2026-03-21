@@ -18,7 +18,7 @@ pub async fn run_query(db_manager: &DatabaseManager, q: &str) -> DatabaseResult<
         "SELECT id, name, bio, avatar_url, affiliation
         FROM author
         WHERE
-            name LIKE ? OR affiliation LIKE ?
+            name LIKE $1 OR affiliation LIKE $2
         LIMIT 20",
     )
     .bind(&pattern)

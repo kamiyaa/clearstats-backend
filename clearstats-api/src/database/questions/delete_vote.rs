@@ -11,9 +11,9 @@ pub async fn run_query(
     // Remove vote contribution from counts
     sqlx::query(
         "UPDATE question
-         SET upvotes = upvotes - IF((SELECT vote FROM question_vote WHERE question_id = ? AND user_id = ?) = 1, 1, 0),
-             downvotes = downvotes - IF((SELECT vote FROM question_vote WHERE question_id = ? AND user_id = ?) = -1, 1, 0)
-         WHERE id = ?",
+         SET upvotes = upvotes - CASE WHEN (SELECT vote FROM question_vote WHERE question_id = $1 AND user_id = $2) = 1 THEN 1 ELSE 0 END,
+             downvotes = downvotes - CASE WHEN (SELECT vote FROM question_vote WHERE question_id = $3 AND user_id = $4) = -1 THEN 1 ELSE 0 END
+         WHERE id = $5",
     )
     .bind(question_id)
     .bind(user_id)
@@ -23,7 +23,7 @@ pub async fn run_query(
     .execute(pool)
     .await?;
 
-    sqlx::query("DELETE FROM question_vote WHERE question_id = ? AND user_id = ?")
+    sqlx::query("DELETE FROM question_vote WHERE question_id = $1 AND user_id = $2")
         .bind(question_id)
         .bind(user_id)
         .execute(pool)

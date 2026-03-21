@@ -35,7 +35,7 @@ pub async fn run_query(
             up.created_at
         FROM user_credential uc
         INNER JOIN user_profile up ON uc.id = up.user_id
-        WHERE uc.email = ?",
+        WHERE uc.email = $1",
     )
     .bind(email)
     .fetch_optional(pool)
