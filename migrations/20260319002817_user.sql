@@ -1,5 +1,5 @@
 CREATE TABLE IF NOT EXISTS user_credential(
-    id SERIAL PRIMARY KEY,
+    id BIGSERIAL PRIMARY KEY,
     email VARCHAR(326) NOT NULL,
     password_hash VARCHAR(256) NOT NULL,
     salt VARCHAR(32) NOT NULL,

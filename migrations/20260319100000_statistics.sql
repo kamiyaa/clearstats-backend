@@ -1,5 +1,5 @@
 CREATE TABLE IF NOT EXISTS author (
-    id SERIAL PRIMARY KEY,
+    id BIGSERIAL PRIMARY KEY,
     name VARCHAR(200) NOT NULL,
     bio TEXT,
     avatar_url VARCHAR(500),
@@ -7,7 +7,7 @@ CREATE TABLE IF NOT EXISTS author (
 );
 
 CREATE TABLE IF NOT EXISTS statistic (
-    id SERIAL PRIMARY KEY,
+    id BIGSERIAL PRIMARY KEY,
     title VARCHAR(500) NOT NULL,
     description TEXT NOT NULL,
     posted_by_user_id BIGINT NOT NULL,
@@ -26,7 +26,7 @@ CREATE TABLE IF NOT EXISTS statistic_tag (
 );
 
 CREATE TABLE IF NOT EXISTS statistic_source (
-    id SERIAL PRIMARY KEY,
+    id BIGSERIAL PRIMARY KEY,
     statistic_id BIGINT NOT NULL,
     url VARCHAR(1000) NOT NULL,
     title VARCHAR(500)
@@ -35,7 +35,7 @@ CREATE TABLE IF NOT EXISTS statistic_source (
 CREATE UNIQUE INDEX idx_statistic_source_statistic_id ON statistic_source (statistic_id);
 
 CREATE TABLE IF NOT EXISTS statistic_attachment (
-    id SERIAL PRIMARY KEY,
+    id BIGSERIAL PRIMARY KEY,
     statistic_id BIGINT NOT NULL,
     url VARCHAR(1000) NOT NULL,
     filename VARCHAR(300) NOT NULL

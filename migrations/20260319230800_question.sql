@@ -1,5 +1,5 @@
 CREATE TABLE IF NOT EXISTS question (
-    id SERIAL PRIMARY KEY,
+    id BIGSERIAL PRIMARY KEY,
     statistic_id BIGINT NOT NULL,
     body TEXT NOT NULL,
     posted_by_user_id BIGINT NOT NULL,
