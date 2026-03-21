@@ -77,7 +77,7 @@ pub async fn run_query(
             statistic_vote s_vote
         ON
             s_vote.statistic_id = s.id
-        WHERE
+        AND
             s_vote.user_id = $1
             {search_query}
             {tag_query}

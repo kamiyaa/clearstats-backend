@@ -2,13 +2,12 @@ name: clearstats
 
 services:
   database:
-    image: mysql:latest
+    image: postgres:latest
     container_name: clearstats-db
     restart: always
     ports:
-      - "3306:3306"
+      - "0.0.0.0:5444:5432"
     environment:
-      - MYSQL_DATABASE=clearstats
-#      - MYSQL_USER=...
-#      - MYSQL_PASSWORD=...
-      - MYSQL_ROOT_PASSWORD=clearstats-pw
+      - POSTGRES_USER=clearstats
+      - POSTGRES_PASSWORD=clearstats-pw
+      - POSTGRES_DB=clearstats-db
