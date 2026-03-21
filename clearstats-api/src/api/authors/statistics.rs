@@ -1,6 +1,7 @@
 use axum::extract::{Path, State};
 use axum::http::{HeaderMap, StatusCode};
 
+use shared_lib::database::DatabaseInteger;
 use shared_lib::error::{AppServerResult, ServerErrorResponse, ServerSuccessResponse};
 use shared_lib::types::jwt::AccessToken;
 
@@ -12,7 +13,7 @@ use crate::types::StatisticResponse;
 pub async fn handler(
     State(app_state): State<AppState>,
     headers: HeaderMap,
-    Path(author_id): Path<u64>,
+    Path(author_id): Path<DatabaseInteger>,
 ) -> AppServerResult<ServerSuccessResponse<Vec<StatisticResponse>>> {
     use shared_lib::database::manager::DatabaseManagerTrait;
 
@@ -24,7 +25,7 @@ pub async fn handler(
     let db_manager = app_state.get_db_manager();
 
     // Get statistic IDs for this author
-    let id_rows: Vec<(u64,)> = sqlx::query_as(
+    let id_rows: Vec<(DatabaseInteger,)> = sqlx::query_as(
         "SELECT statistic_id FROM statistic_author WHERE author_id = ? ORDER BY statistic_id DESC",
     )
     .bind(author_id)

@@ -1,4 +1,4 @@
-use shared_lib::database::DatabaseResult;
+use shared_lib::database::{DatabaseResult, DatabaseInteger};
 use shared_lib::database::manager::{DatabaseManager, DatabaseManagerTrait};
 use shared_lib::database::tables::user::TABLE_USER_EMAIL_VERIFTCATION;
 
@@ -6,7 +6,7 @@ pub async fn run_query(
     db_manager: &DatabaseManager,
     email: &str,
     verification_code: &str,
-    created_at: u64,
+    created_at: DatabaseInteger,
 ) -> DatabaseResult {
     let pool = db_manager.get_database_pool();
 

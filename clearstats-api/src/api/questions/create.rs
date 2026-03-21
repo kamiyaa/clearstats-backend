@@ -3,6 +3,7 @@ use axum::extract::{Path, State};
 use axum::http::{HeaderMap, StatusCode};
 use serde::Deserialize;
 
+use shared_lib::database::DatabaseInteger;
 use shared_lib::error::{AppServerResult, ServerErrorResponse, ServerSuccessResponse};
 use shared_lib::types::jwt::AccessToken;
 use shared_lib::utils::time::get_secs_since_epoch;
@@ -20,7 +21,7 @@ pub struct RequestBody {
 pub async fn handler(
     State(app_state): State<AppState>,
     headers: HeaderMap,
-    Path(statistic_id): Path<u64>,
+    Path(statistic_id): Path<DatabaseInteger>,
     Json(payload): Json<RequestBody>,
 ) -> AppServerResult<ServerSuccessResponse<QuestionResponse>> {
     let token =

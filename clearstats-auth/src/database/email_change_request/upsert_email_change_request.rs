@@ -1,13 +1,13 @@
-use shared_lib::database::DatabaseResult;
+use shared_lib::database::{DatabaseInteger, DatabaseResult};
 use shared_lib::database::manager::{DatabaseManager, DatabaseManagerTrait};
 use shared_lib::database::tables::user::TABLE_EMAIL_CHANGE_REQUEST;
 
 pub async fn run_query(
     db_manager: &DatabaseManager,
     email: &str,
-    user_id: u64,
+    user_id: DatabaseInteger,
     verification_code: &str,
-    created_at: u64,
+    created_at: DatabaseInteger,
 ) -> DatabaseResult {
     let pool = db_manager.get_database_pool();
 

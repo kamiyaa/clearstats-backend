@@ -1,25 +1,26 @@
-use shared_lib::database::DatabaseResult;
+use shared_lib::database::{DatabaseInteger, DatabaseResult};
 use shared_lib::database::manager::{DatabaseManager, DatabaseManagerTrait};
+use shared_lib::types::database::SqlId;
 use sqlx::FromRow;
 
 pub struct SqlData<'a> {
-    pub statistic_id: u64,
+    pub statistic_id: DatabaseInteger,
     pub body: &'a str,
-    pub posted_by_user_id: u64,
-    pub created_at: u64,
+    pub posted_by_user_id: DatabaseInteger,
+    pub created_at: DatabaseInteger,
 }
 
 #[derive(Clone, Debug, FromRow)]
 pub struct QuestionRow {
-    pub id: u64,
-    pub statistic_id: u64,
+    pub id: DatabaseInteger,
+    pub statistic_id: DatabaseInteger,
     pub body: String,
-    pub upvotes: u64,
-    pub downvotes: u64,
-    pub created_at: u64,
-    pub posted_by_id: u64,
+    pub upvotes: DatabaseInteger,
+    pub downvotes: DatabaseInteger,
+    pub created_at: DatabaseInteger,
+    pub posted_by_id: DatabaseInteger,
     pub posted_by_username: String,
-    pub posted_by_created_at: u64,
+    pub posted_by_created_at: DatabaseInteger,
 }
 
 pub async fn run_query(
@@ -28,18 +29,19 @@ pub async fn run_query(
 ) -> DatabaseResult<QuestionRow> {
     let pool = db_manager.get_database_pool();
 
-    let res = sqlx::query(
+    let res: SqlId = sqlx::query_as(
         "INSERT INTO question (statistic_id, body, posted_by_user_id, created_at)
-         VALUES (?, ?, ?, ?)",
+         VALUES (?, ?, ?, ?)
+         RETURNING id;",
     )
     .bind(data.statistic_id)
     .bind(data.body)
     .bind(data.posted_by_user_id)
     .bind(data.created_at)
-    .execute(pool)
+    .fetch_one(pool)
     .await?;
 
-    let question_id = res.last_insert_id();
+    let question_id = res.id;
 
     sqlx::query("UPDATE statistic SET question_count = question_count + 1 WHERE id = ?")
         .bind(data.statistic_id)

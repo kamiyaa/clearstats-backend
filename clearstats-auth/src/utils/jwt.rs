@@ -1,5 +1,6 @@
 use cookie::{Cookie, SameSite};
 use shared_lib::config::env::Environment;
+use shared_lib::database::DatabaseInteger;
 use shared_lib::utils::time::get_secs_since_epoch;
 
 use axum::http::StatusCode;
@@ -12,7 +13,7 @@ use crate::config::AppConfig;
 
 pub fn generate_access_token_from_config(
     secret: &str,
-    lifetime: u64,
+    lifetime: DatabaseInteger,
     jwt_data: UserClaims,
 ) -> AppServerResult<String> {
     let key = secret.as_bytes();
@@ -45,7 +46,7 @@ pub fn generate_access_token(key: &[u8], claims: &jwt::AccessToken) -> AppServer
 
 pub fn generate_refresh_token(
     secret: &str,
-    lifetime: u64,
+    lifetime: DatabaseInteger,
     jwt_data: UserClaims,
 ) -> AppServerResult<String> {
     let key = secret.as_bytes();
@@ -109,7 +110,7 @@ mod tests {
         let key = b"12345678";
         let jwt_data = jwt::AccessToken {
             user: user_claims,
-            exp: u64::MAX - 1,
+            exp: DatabaseInteger::MAX - 1,
         };
         let jwt_token = generate_access_token(key, &jwt_data)?;
 

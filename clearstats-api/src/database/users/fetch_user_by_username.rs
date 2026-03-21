@@ -1,12 +1,12 @@
-use shared_lib::database::DatabaseResult;
+use shared_lib::database::{DatabaseInteger, DatabaseResult};
 use shared_lib::database::manager::{DatabaseManager, DatabaseManagerTrait};
 use sqlx::FromRow;
 
 #[derive(Clone, Debug, FromRow)]
 pub struct SqlData {
-    pub id: u64,
+    pub id: DatabaseInteger,
     pub username: String,
-    pub created_at: u64,
+    pub created_at: DatabaseInteger,
 }
 
 pub async fn run_query(

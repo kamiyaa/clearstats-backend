@@ -2,6 +2,7 @@ use std::collections::HashMap;
 
 use axum::http::StatusCode;
 
+use shared_lib::database::DatabaseInteger;
 use shared_lib::database::manager::DatabaseManager;
 use shared_lib::error::{AppServerResult, ServerErrorResponse};
 
@@ -11,19 +12,20 @@ use crate::types::{
 };
 use crate::utils::time::unix_secs_to_iso;
 
+#[derive(Clone, Debug)]
 pub struct StatisticRow {
-    pub id: u64,
+    pub id: DatabaseInteger,
     pub title: String,
     pub description: String,
-    pub upvotes: u64,
-    pub downvotes: u64,
+    pub upvotes: DatabaseInteger,
+    pub downvotes: DatabaseInteger,
     pub user_vote: Option<i8>,
-    pub question_count: u64,
-    pub created_at: u64,
-    pub updated_at: u64,
-    pub posted_by_id: u64,
+    pub question_count: DatabaseInteger,
+    pub created_at: DatabaseInteger,
+    pub updated_at: DatabaseInteger,
+    pub posted_by_id: DatabaseInteger,
     pub posted_by_username: String,
-    pub posted_by_created_at: u64,
+    pub posted_by_created_at: DatabaseInteger,
 }
 
 pub async fn build_statistic_responses(
@@ -33,7 +35,7 @@ pub async fn build_statistic_responses(
     if rows.is_empty() {
         return Ok(vec![]);
     }
-    let statistic_ids: Vec<u64> = rows.iter().map(|r| r.id).collect();
+    let statistic_ids: Vec<DatabaseInteger> = rows.iter().map(|r| r.id).collect();
 
     let tags = statistics::fetch_tags_by_statistic_ids::run_query(db_manager, &statistic_ids)
         .await
@@ -81,8 +83,8 @@ pub async fn build_statistic_responses(
                 )
             })?;
 
-    let all_author_ids: Vec<u64> = {
-        let mut ids: Vec<u64> = author_id_rows.iter().map(|r| r.author_id).collect();
+    let all_author_ids: Vec<DatabaseInteger> = {
+        let mut ids: Vec<DatabaseInteger> = author_id_rows.iter().map(|r| r.author_id).collect();
         ids.sort();
         ids.dedup();
         ids
@@ -100,12 +102,12 @@ pub async fn build_statistic_responses(
         })?;
 
     // Build lookup maps
-    let mut tags_by_id: HashMap<u64, Vec<String>> = HashMap::new();
+    let mut tags_by_id: HashMap<DatabaseInteger, Vec<String>> = HashMap::new();
     for t in tags {
         tags_by_id.entry(t.statistic_id).or_default().push(t.tag);
     }
 
-    let mut sources_by_id: HashMap<u64, Vec<SourceResponse>> = HashMap::new();
+    let mut sources_by_id: HashMap<DatabaseInteger, Vec<SourceResponse>> = HashMap::new();
     for s in sources {
         sources_by_id
             .entry(s.statistic_id)
@@ -117,7 +119,7 @@ pub async fn build_statistic_responses(
             });
     }
 
-    let mut attachments_by_id: HashMap<u64, Vec<AttachmentResponse>> = HashMap::new();
+    let mut attachments_by_id: HashMap<DatabaseInteger, Vec<AttachmentResponse>> = HashMap::new();
     for a in attachments {
         attachments_by_id
             .entry(a.statistic_id)
@@ -129,7 +131,7 @@ pub async fn build_statistic_responses(
             });
     }
 
-    let authors_map: HashMap<u64, AuthorResponse> = author_rows
+    let authors_map: HashMap<DatabaseInteger, AuthorResponse> = author_rows
         .into_iter()
         .map(|a| {
             (
@@ -145,7 +147,7 @@ pub async fn build_statistic_responses(
         })
         .collect();
 
-    let mut author_ids_by_statistic: HashMap<u64, Vec<u64>> = HashMap::new();
+    let mut author_ids_by_statistic: HashMap<DatabaseInteger, Vec<DatabaseInteger>> = HashMap::new();
     for r in author_id_rows {
         author_ids_by_statistic
             .entry(r.statistic_id)

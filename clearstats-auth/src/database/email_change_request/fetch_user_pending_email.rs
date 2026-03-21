@@ -1,12 +1,12 @@
 use shared_lib::database::tables::user::TABLE_EMAIL_CHANGE_REQUEST;
 use sqlx::FromRow;
 
-use shared_lib::database::DatabaseResult;
+use shared_lib::database::{DatabaseInteger, DatabaseResult};
 use shared_lib::database::manager::{DatabaseManager, DatabaseManagerTrait};
 
 pub async fn run_query(
     db_manager: &DatabaseManager,
-    user_id: u64,
+    user_id: DatabaseInteger,
 ) -> DatabaseResult<Option<String>> {
     let pool = db_manager.get_database_pool();
 
@@ -14,7 +14,7 @@ pub async fn run_query(
         "SELECT
             pending_email
         FROM
-            {TABLE_EMAIL_CHANGE_REQUEST} 
+            {TABLE_EMAIL_CHANGE_REQUEST}
         WHERE
             user_id = ?
         ;"

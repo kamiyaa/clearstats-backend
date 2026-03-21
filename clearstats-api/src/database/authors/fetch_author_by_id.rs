@@ -1,10 +1,10 @@
-use shared_lib::database::DatabaseResult;
+use shared_lib::database::{DatabaseInteger, DatabaseResult};
 use shared_lib::database::manager::{DatabaseManager, DatabaseManagerTrait};
 use sqlx::FromRow;
 
 #[derive(Clone, Debug, FromRow)]
 pub struct SqlData {
-    pub id: u64,
+    pub id: DatabaseInteger,
     pub name: String,
     pub bio: Option<String>,
     pub avatar_url: Option<String>,
@@ -13,7 +13,7 @@ pub struct SqlData {
 
 pub async fn run_query(
     db_manager: &DatabaseManager,
-    author_id: u64,
+    author_id: DatabaseInteger,
 ) -> DatabaseResult<Option<SqlData>> {
     let pool = db_manager.get_database_pool();
     let sql_res =

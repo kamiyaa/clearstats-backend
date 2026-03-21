@@ -3,6 +3,7 @@ use axum::extract::State;
 use axum::http::{HeaderMap, StatusCode};
 use serde::Deserialize;
 
+use shared_lib::database::DatabaseInteger;
 use shared_lib::error::{AppServerResult, ServerErrorResponse, ServerSuccessResponse};
 use shared_lib::types::jwt::AccessToken;
 use shared_lib::utils::time::get_secs_since_epoch;
@@ -19,7 +20,7 @@ pub struct RequestBody {
     pub tags: Vec<String>,
     pub sources: Vec<SourceInput>,
     pub attachments: Vec<AttachmentInput>,
-    pub author_ids: Vec<u64>,
+    pub author_ids: Vec<DatabaseInteger>,
 }
 
 #[derive(Debug, Deserialize)]

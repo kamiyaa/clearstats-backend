@@ -3,14 +3,17 @@ pub mod tables;
 
 use axum::http::StatusCode;
 use sqlx::migrate::Migrator;
-use sqlx::{MySql, pool::PoolOptions};
+use sqlx::{Postgres, pool::PoolOptions};
 
 use crate::error::{AppServerResult, ServerErrorResponse};
 
 pub static DEFAULT_MIGRATOR: Migrator = sqlx::migrate!("../migrations");
 
-pub type DatabasePool = sqlx::MySqlPool;
-pub type DatabaseTransaction = sqlx::Transaction<'static, MySql>;
+pub type DatabaseInteger = i64;
+pub type DatabaseBoolean = i8;
+
+pub type DatabasePool = sqlx::Pool<Postgres>;
+pub type DatabaseTransaction = sqlx::Transaction<'static, Postgres>;
 pub type DatabaseResult<T = ()> = Result<T, sqlx::Error>;
 
 pub async fn connect_to_database(database_url: &str) -> AppServerResult<DatabasePool> {

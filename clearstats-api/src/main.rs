@@ -10,6 +10,7 @@ use std::env;
 
 use axum::{Router, http::StatusCode, middleware, routing::get};
 
+use shared_lib::database::DatabaseInteger;
 use shared_lib::database::manager::DatabaseManager;
 use shared_lib::logging::setup_tracing_subscriber_registry;
 use shared_lib::{
@@ -19,7 +20,7 @@ use shared_lib::{
 
 use crate::{config::AppConfig, state::AppState};
 
-pub const PAGE_SIZE: u64 = 20;
+pub const PAGE_SIZE: DatabaseInteger = 20;
 
 const PORT: u16 = 8204;
 

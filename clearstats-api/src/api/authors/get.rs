@@ -1,6 +1,7 @@
 use axum::extract::{Path, State};
 use axum::http::StatusCode;
 
+use shared_lib::database::DatabaseInteger;
 use shared_lib::error::{AppServerResult, ServerErrorResponse, ServerSuccessResponse};
 
 use crate::AppState;
@@ -9,7 +10,7 @@ use crate::types::AuthorResponse;
 
 pub async fn handler(
     State(app_state): State<AppState>,
-    Path(id): Path<u64>,
+    Path(id): Path<DatabaseInteger>,
 ) -> AppServerResult<ServerSuccessResponse<AuthorResponse>> {
     let db_manager = app_state.get_db_manager();
 

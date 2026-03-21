@@ -1,24 +1,24 @@
-use shared_lib::database::DatabaseResult;
+use shared_lib::database::{DatabaseInteger, DatabaseResult};
 use shared_lib::database::manager::{DatabaseManager, DatabaseManagerTrait};
 use sqlx::FromRow;
 
 #[derive(Clone, Debug, FromRow)]
 pub struct SqlData {
-    pub id: u64,
-    pub statistic_id: u64,
+    pub id: DatabaseInteger,
+    pub statistic_id: DatabaseInteger,
     pub body: String,
-    pub upvotes: u64,
-    pub downvotes: u64,
-    pub created_at: u64,
-    pub posted_by_id: u64,
+    pub upvotes: DatabaseInteger,
+    pub downvotes: DatabaseInteger,
+    pub created_at: DatabaseInteger,
+    pub posted_by_id: DatabaseInteger,
     pub posted_by_username: String,
     pub posted_by_email: String,
-    pub posted_by_created_at: u64,
+    pub posted_by_created_at: DatabaseInteger,
 }
 
 pub async fn run_query(
     db_manager: &DatabaseManager,
-    statistic_id: u64,
+    statistic_id: DatabaseInteger,
 ) -> DatabaseResult<Vec<SqlData>> {
     let pool = db_manager.get_database_pool();
     let results = sqlx::query_as(

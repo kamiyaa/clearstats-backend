@@ -1,18 +1,18 @@
-use shared_lib::database::DatabaseResult;
+use shared_lib::database::{DatabaseInteger, DatabaseResult};
 use shared_lib::database::manager::{DatabaseManager, DatabaseManagerTrait};
 use sqlx::FromRow;
 
 #[derive(Clone, Debug, FromRow)]
 pub struct SqlData {
-    pub id: u64,
-    pub statistic_id: u64,
+    pub id: DatabaseInteger,
+    pub statistic_id: DatabaseInteger,
     pub url: String,
     pub filename: String,
 }
 
 pub async fn run_query(
     db_manager: &DatabaseManager,
-    statistic_ids: &[u64],
+    statistic_ids: &[DatabaseInteger],
 ) -> DatabaseResult<Vec<SqlData>> {
     if statistic_ids.is_empty() {
         return Ok(vec![]);

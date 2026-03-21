@@ -1,6 +1,7 @@
 use axum::extract::{Path, State};
 use axum::http::{HeaderMap, StatusCode};
 
+use shared_lib::database::DatabaseInteger;
 use shared_lib::error::{AppServerResult, ServerErrorResponse, ServerSuccessResponse};
 use shared_lib::types::jwt::AccessToken;
 
@@ -12,7 +13,7 @@ use crate::types::StatisticResponse;
 pub async fn handler(
     State(app_state): State<AppState>,
     headers: HeaderMap,
-    Path(id): Path<u64>,
+    Path(id): Path<DatabaseInteger>,
 ) -> AppServerResult<ServerSuccessResponse<StatisticResponse>> {
     let current_user_id =
         AccessToken::from_header_map_unverified(headers, app_state.config.get_jwt_token_secret())

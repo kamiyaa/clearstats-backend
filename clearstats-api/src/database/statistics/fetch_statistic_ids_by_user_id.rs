@@ -1,13 +1,13 @@
-use shared_lib::database::DatabaseResult;
+use shared_lib::database::{DatabaseInteger, DatabaseResult};
 use shared_lib::database::manager::{DatabaseManager, DatabaseManagerTrait};
 use sqlx::FromRow;
 
 #[derive(Clone, Debug, FromRow)]
 pub struct SqlData {
-    pub id: u64,
+    pub id: DatabaseInteger,
 }
 
-pub async fn run_query(db_manager: &DatabaseManager, user_id: u64) -> DatabaseResult<Vec<SqlData>> {
+pub async fn run_query(db_manager: &DatabaseManager, user_id: DatabaseInteger) -> DatabaseResult<Vec<SqlData>> {
     let pool = db_manager.get_database_pool();
     let results = sqlx::query_as(
         "SELECT id FROM statistic WHERE posted_by_user_id = ? ORDER BY created_at DESC",

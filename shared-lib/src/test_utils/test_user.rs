@@ -1,9 +1,8 @@
 use crate::{
-    error::AppServerResult,
-    types::{
+    database::{DatabaseInteger}, error::AppServerResult, types::{
         jwt::{self, UserClaims},
         user::UserProfileBrief,
-    },
+    }
 };
 
 use super::jwt::generate_access_token;
@@ -20,7 +19,7 @@ pub enum TestUser {
 }
 
 impl TestUser {
-    pub fn user_id(&self) -> u64 {
+    pub fn user_id(&self) -> DatabaseInteger {
         match self {
             Self::Alice => 1,
             Self::BlackHat => 7,
@@ -186,7 +185,7 @@ impl TestUser {
 fn _generate_test_jwt(key: &[u8], user_claims: &UserClaims) -> AppServerResult<String> {
     let jwt_data = jwt::AccessToken {
         user: user_claims.clone(),
-        exp: u64::MAX - 1,
+        exp: DatabaseInteger::MAX - 1,
     };
 
     let jwt_token = generate_access_token(key, &jwt_data)?;

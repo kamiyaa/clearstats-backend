@@ -1,10 +1,10 @@
-use shared_lib::database::DatabaseResult;
+use shared_lib::database::{DatabaseInteger, DatabaseResult};
 use shared_lib::database::manager::{DatabaseManager, DatabaseManagerTrait};
 use shared_lib::database::tables::user::TABLE_USER_CREDENTIAL;
 
 #[derive(Clone, Debug)]
 pub struct SqlData {
-    pub user_id: u64,
+    pub user_id: DatabaseInteger,
     pub password_hash: String,
     pub salt: String,
 }

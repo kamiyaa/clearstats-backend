@@ -3,6 +3,7 @@ use axum::extract::{Path, State};
 use axum::http::{HeaderMap, StatusCode};
 use serde::Deserialize;
 
+use shared_lib::database::DatabaseInteger;
 use shared_lib::error::{AppServerResult, ServerErrorResponse, ServerSuccessResponse};
 use shared_lib::types::jwt::AccessToken;
 
@@ -21,7 +22,7 @@ pub struct VoteBody {
 pub async fn upsert_handler(
     State(app_state): State<AppState>,
     headers: HeaderMap,
-    Path((statistic_id, question_id)): Path<(u64, u64)>,
+    Path((statistic_id, question_id)): Path<(DatabaseInteger, DatabaseInteger)>,
     Json(payload): Json<VoteBody>,
 ) -> AppServerResult<ServerSuccessResponse<QuestionResponse>> {
     let token =
@@ -54,7 +55,7 @@ pub async fn upsert_handler(
 pub async fn delete_handler(
     State(app_state): State<AppState>,
     headers: HeaderMap,
-    Path((statistic_id, question_id)): Path<(u64, u64)>,
+    Path((statistic_id, question_id)): Path<(DatabaseInteger, DatabaseInteger)>,
 ) -> AppServerResult<ServerSuccessResponse<QuestionResponse>> {
     let token =
         AccessToken::from_header_map_unverified(headers, app_state.config.get_jwt_token_secret())?;
@@ -77,9 +78,9 @@ pub async fn delete_handler(
 
 async fn fetch_question_response(
     db_manager: &shared_lib::database::manager::DatabaseManager,
-    statistic_id: u64,
-    question_id: u64,
-    user_id: u64,
+    statistic_id: DatabaseInteger,
+    question_id: DatabaseInteger,
+    user_id: DatabaseInteger,
 ) -> AppServerResult<ServerSuccessResponse<QuestionResponse>> {
     let rows = fetch_questions_by_statistic_id::run_query(db_manager, statistic_id)
         .await

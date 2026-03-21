@@ -4,15 +4,14 @@ use jsonwebtoken::{DecodingKey, TokenData, Validation, decode};
 use serde::{Deserialize, Serialize};
 
 use crate::{
-    error::{AppServerResult, ServerErrorResponse},
-    utils::time::get_secs_since_epoch,
+    database::{DatabaseInteger}, error::{AppServerResult, ServerErrorResponse}, utils::time::get_secs_since_epoch
 };
 
 pub const COOKIE_REFRESH_TOKEN: &str = "REFRESH_TOKEN";
 
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 pub struct UserClaims {
-    pub user_id: u64,
+    pub user_id: DatabaseInteger,
     pub username: String,
     pub first_name: String,
     pub last_name: String,
@@ -23,7 +22,7 @@ pub struct UserClaims {
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct AccessToken {
     pub user: UserClaims,
-    pub exp: u64,
+    pub exp: DatabaseInteger,
 }
 
 impl AccessToken {
@@ -76,9 +75,9 @@ impl AccessToken {
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct RefreshToken {
-    pub user_id: u64,
+    pub user_id: DatabaseInteger,
     pub username: String,
-    pub exp: u64,
+    pub exp: DatabaseInteger,
 }
 
 impl RefreshToken {

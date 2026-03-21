@@ -1,4 +1,4 @@
-use shared_lib::database::DatabaseResult;
+use shared_lib::database::{DatabaseBoolean, DatabaseInteger, DatabaseResult};
 use shared_lib::database::tables::user::{TABLE_USER_CREDENTIAL, TABLE_USER_PROFILE};
 use sqlx::FromRow;
 
@@ -7,12 +7,12 @@ use shared_lib::database::manager::{DatabaseManager, DatabaseManagerTrait};
 #[allow(dead_code)]
 #[derive(Clone, Debug, FromRow)]
 pub struct SqlData {
-    pub id: u64,
+    pub id: DatabaseInteger,
     pub username: String,
     pub email: String,
     pub password_hash: String,
     pub salt: String,
-    pub email_verified: u8,
+    pub email_verified: DatabaseBoolean,
     pub first_name: String,
     pub last_name: String,
     pub icon_hash: Option<String>,
@@ -20,7 +20,7 @@ pub struct SqlData {
 
 pub async fn run_query(
     db_manager: &DatabaseManager,
-    user_id: u64,
+    user_id: DatabaseInteger,
 ) -> DatabaseResult<Option<SqlData>> {
     let pool = db_manager.get_database_pool();
 

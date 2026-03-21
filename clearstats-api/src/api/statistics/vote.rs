@@ -3,6 +3,7 @@ use axum::extract::{Path, State};
 use axum::http::{HeaderMap, StatusCode};
 use serde::{Deserialize, Serialize};
 
+use shared_lib::database::DatabaseInteger;
 use shared_lib::error::{AppServerResult, ServerErrorResponse, ServerSuccessResponse};
 use shared_lib::types::jwt::AccessToken;
 
@@ -16,16 +17,16 @@ pub struct RequestBody {
 
 #[derive(Clone, Debug, Serialize)]
 pub struct ResponseBody {
-    pub id: u64,
-    pub upvotes: u64,
-    pub downvotes: u64,
-    pub question_count: u64,
+    pub id: DatabaseInteger,
+    pub upvotes: DatabaseInteger,
+    pub downvotes: DatabaseInteger,
+    pub question_count: DatabaseInteger,
 }
 
 pub async fn upsert_handler(
     State(app_state): State<AppState>,
     headers: HeaderMap,
-    Path(id): Path<u64>,
+    Path(id): Path<DatabaseInteger>,
     Json(payload): Json<RequestBody>,
 ) -> AppServerResult<ServerSuccessResponse<ResponseBody>> {
     let token =
@@ -82,7 +83,7 @@ pub async fn upsert_handler(
 pub async fn delete_handler(
     State(app_state): State<AppState>,
     headers: HeaderMap,
-    Path(id): Path<u64>,
+    Path(id): Path<DatabaseInteger>,
 ) -> AppServerResult<ServerSuccessResponse<ResponseBody>> {
     let token =
         AccessToken::from_header_map_unverified(headers, app_state.config.get_jwt_token_secret())?;

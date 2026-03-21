@@ -1,13 +1,13 @@
 use sqlx::FromRow;
 
-use shared_lib::database::DatabaseResult;
+use shared_lib::database::{DatabaseInteger, DatabaseResult};
 use shared_lib::database::manager::{DatabaseManager, DatabaseManagerTrait};
 use shared_lib::database::tables::user::{TABLE_USER_PASSWORD_RESET, TABLE_USER_PROFILE};
 
 #[derive(Clone, Debug, FromRow)]
 pub struct SqlData {
-    pub user_id: u64,
-    pub expires_at: u64,
+    pub user_id: DatabaseInteger,
+    pub expires_at: DatabaseInteger,
 }
 
 pub async fn run_query(

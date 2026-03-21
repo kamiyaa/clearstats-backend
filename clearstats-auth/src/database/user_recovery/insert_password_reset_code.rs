@@ -1,12 +1,12 @@
-use shared_lib::database::DatabaseResult;
+use shared_lib::database::{DatabaseInteger, DatabaseResult};
 use shared_lib::database::manager::{DatabaseManager, DatabaseManagerTrait};
 use shared_lib::database::tables::user::TABLE_USER_PASSWORD_RESET;
 
 pub async fn run_query(
     db_manager: &DatabaseManager,
-    user_id: u64,
+    user_id: DatabaseInteger,
     password_reset_code: &str,
-    expires_at: u64,
+    expires_at: DatabaseInteger,
 ) -> DatabaseResult {
     let pool = db_manager.get_database_pool();
 

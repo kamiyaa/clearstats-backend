@@ -3,6 +3,7 @@ use std::collections::HashMap;
 use axum::extract::{Path, State};
 use axum::http::{HeaderMap, StatusCode};
 
+use shared_lib::database::DatabaseInteger;
 use shared_lib::error::{AppServerResult, ServerErrorResponse, ServerSuccessResponse};
 use shared_lib::types::jwt::AccessToken;
 
@@ -14,7 +15,7 @@ use crate::utils::time::unix_secs_to_iso;
 pub async fn handler(
     State(app_state): State<AppState>,
     headers: HeaderMap,
-    Path(statistic_id): Path<u64>,
+    Path(statistic_id): Path<DatabaseInteger>,
 ) -> AppServerResult<ServerSuccessResponse<Vec<QuestionResponse>>> {
     let current_user_id =
         AccessToken::from_header_map_unverified(headers, app_state.config.get_jwt_token_secret())
@@ -34,9 +35,9 @@ pub async fn handler(
             )
         })?;
 
-    let question_ids: Vec<u64> = rows.iter().map(|r| r.id).collect();
+    let question_ids: Vec<DatabaseInteger> = rows.iter().map(|r| r.id).collect();
 
-    let votes: HashMap<u64, i8> = if let Some(user_id) = current_user_id {
+    let votes: HashMap<DatabaseInteger, i8> = if let Some(user_id) = current_user_id {
         fetch_votes_by_question_ids::run_query(db_manager, &question_ids, user_id)
             .await
             .map_err(|err| {

@@ -1,10 +1,10 @@
-use shared_lib::database::DatabaseResult;
+use shared_lib::database::{DatabaseInteger, DatabaseResult};
 use shared_lib::database::manager::{DatabaseManager, DatabaseManagerTrait};
 
 pub async fn run_query(
     db_manager: &DatabaseManager,
-    question_id: u64,
-    user_id: u64,
+    question_id: DatabaseInteger,
+    user_id: DatabaseInteger,
     vote: i8,
 ) -> DatabaseResult {
     let pool = db_manager.get_database_pool();

@@ -1,8 +1,6 @@
 use axum::http::StatusCode;
 use shared_lib::{
-    config::{env::Environment, service_config::ServiceConfig},
-    error::{AppServerResult, ServerErrorResponse},
-    utils,
+    config::{env::Environment, service_config::ServiceConfig}, database::DatabaseInteger, error::{AppServerResult, ServerErrorResponse}, utils
 };
 
 #[derive(Clone, Debug)]
@@ -11,9 +9,9 @@ pub struct AppConfig {
     pub database_url: String,
     pub clearstats_lab_url: String,
     pub jwt_token_secret: String,
-    pub jwt_token_lifetime: u64,
+    pub jwt_token_lifetime: DatabaseInteger,
     pub jwt_refresh_token_secret: String,
-    pub jwt_refresh_token_lifetime: u64,
+    pub jwt_refresh_token_lifetime: DatabaseInteger,
     pub gcp_project_id: String,
     pub mailersend_api_key: String,
     pub sentry_dsn_url: Option<String>,

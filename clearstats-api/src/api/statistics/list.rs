@@ -2,6 +2,7 @@ use axum::extract::{Query, State};
 use axum::http::{HeaderMap, StatusCode};
 use serde::{Deserialize, Serialize};
 
+use shared_lib::database::DatabaseInteger;
 use shared_lib::error::{AppServerResult, ServerErrorResponse, ServerSuccessResponse};
 use shared_lib::types::jwt::AccessToken;
 
@@ -12,7 +13,7 @@ use crate::types::{StatisticResponse};
 
 #[derive(Debug, Deserialize)]
 pub struct QueryParams {
-    pub page: Option<u64>,
+    pub page: Option<DatabaseInteger>,
     pub search: Option<String>,
     pub tag: Option<String>,
 }

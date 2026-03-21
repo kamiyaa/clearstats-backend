@@ -1,12 +1,12 @@
 use shared_lib::database::tables::user::TABLE_USER_CREDENTIAL;
 use sqlx::FromRow;
 
-use shared_lib::database::DatabaseResult;
+use shared_lib::database::{DatabaseInteger, DatabaseResult};
 use shared_lib::database::manager::{DatabaseManager, DatabaseManagerTrait};
 
 pub async fn run_query(
     db_manager: &DatabaseManager,
-    user_id: u64,
+    user_id: DatabaseInteger,
 ) -> DatabaseResult<Option<String>> {
     let pool = db_manager.get_database_pool();
 

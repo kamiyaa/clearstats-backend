@@ -1,10 +1,10 @@
-use shared_lib::database::DatabaseResult;
+use shared_lib::database::{DatabaseInteger, DatabaseResult};
 use shared_lib::database::manager::{DatabaseManager, DatabaseManagerTrait};
 use sqlx::FromRow;
 
 #[derive(Clone, Debug, FromRow)]
 pub struct SqlData {
-    pub id: u64,
+    pub id: DatabaseInteger,
     pub name: String,
     pub bio: Option<String>,
     pub avatar_url: Option<String>,

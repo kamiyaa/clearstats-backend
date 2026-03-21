@@ -1,6 +1,7 @@
-use shared_lib::database::DatabaseResult;
+use shared_lib::database::{DatabaseInteger, DatabaseResult};
 use shared_lib::database::manager::{DatabaseManager, DatabaseManagerTrait};
 use shared_lib::database::tables::user::{TABLE_USER_CREDENTIAL, TABLE_USER_PROFILE};
+use shared_lib::types::database::SqlId;
 
 pub struct SqlData {
     pub email: String,
@@ -12,11 +13,11 @@ pub struct SqlData {
     pub first_name: String,
     pub last_name: String,
 
-    pub created_at: u64,
-    pub updated_at: u64,
+    pub created_at: DatabaseInteger,
+    pub updated_at: DatabaseInteger,
 }
 
-pub async fn run_query(db_manager: &DatabaseManager, data: &SqlData) -> DatabaseResult<u64> {
+pub async fn run_query(db_manager: &DatabaseManager, data: &SqlData) -> DatabaseResult<DatabaseInteger> {
     let pool = db_manager.get_database_pool();
 
     let mut tx = pool.begin().await?;
@@ -26,24 +27,19 @@ pub async fn run_query(db_manager: &DatabaseManager, data: &SqlData) -> Database
         INSERT INTO {TABLE_USER_CREDENTIAL}
             (email, password_hash, salt, email_verified)
         VALUES
-            (?, ?, ?, ?);
+            (?, ?, ?, ?)
+        RETURNING id;
         "
     );
-    let sql_res = sqlx::query(&sql_query)
+    let sql_res: SqlId = sqlx::query_as(&sql_query)
         .bind(&data.email)
         .bind(&data.password_hash)
         .bind(&data.salt)
         .bind(data.email_verified)
-        .execute(&mut *tx)
+        .fetch_one(&mut *tx)
         .await?;
 
-    if sql_res.rows_affected() == 0 {
-        tx.rollback().await?;
-        return Err(sqlx::Error::RowNotFound);
-    }
-
-    let user_id = sql_res.last_insert_id();
-
+    let user_id = sql_res.id;
     let sql_query = format!(
         "
         INSERT INTO {TABLE_USER_PROFILE}

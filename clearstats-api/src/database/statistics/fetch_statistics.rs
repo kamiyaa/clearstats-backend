@@ -1,30 +1,30 @@
-use shared_lib::database::DatabaseResult;
+use shared_lib::database::{DatabaseInteger, DatabaseResult};
 use shared_lib::database::manager::{DatabaseManager, DatabaseManagerTrait};
 use sqlx::FromRow;
 
 #[derive(Clone, Debug, FromRow)]
 pub struct SqlData {
-    pub id: u64,
+    pub id: DatabaseInteger,
     pub title: String,
     pub description: String,
-    pub upvotes: u64,
-    pub downvotes: u64,
-    pub question_count: u64,
+    pub upvotes: DatabaseInteger,
+    pub downvotes: DatabaseInteger,
+    pub question_count: DatabaseInteger,
     pub user_vote: Option<i8>,
-    pub created_at: u64,
-    pub updated_at: u64,
-    pub posted_by_id: u64,
+    pub created_at: DatabaseInteger,
+    pub updated_at: DatabaseInteger,
+    pub posted_by_id: DatabaseInteger,
     pub posted_by_username: String,
-    pub posted_by_created_at: u64,
+    pub posted_by_created_at: DatabaseInteger,
 }
 
 #[derive(Clone, Debug)]
 pub struct SqlQuery {
-    pub user_id: Option<u64>,
+    pub user_id: Option<DatabaseInteger>,
     pub search: Option<String>,
     pub tag: Option<String>,
-    pub page_size: u64,
-    pub page_index: u64,
+    pub page_size: DatabaseInteger,
+    pub page_index: DatabaseInteger,
 }
 
 pub async fn run_query(
